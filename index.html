@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#120924" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="ALIXOR Planner" />
+  <title>ALIXOR PLANNER V1.0.0 | خطط . تأمل . ارتق</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0612;
+      --bg-card: #150d26;
+      --bg-card-light: #1f1438;
+      --purple-primary: #6d28d9;
+      --purple-glow: #8b5cf6;
+      --purple-soft: #c4b5fd;
+      --silver: #e2e8f0;
+      --silver-muted: #94a3b8;
+      --gold-accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border-color: rgba(139, 92, 246, 0.28);
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background: radial-gradient(circle at top, #1e103a 0%, var(--bg-dark) 70%);
+      color: var(--silver);
+      min-height: 100vh;
+      padding-bottom: 90px;
+      line-height: 1.6;
+    }
+
+    .top-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10, 6, 18, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .brand-box { display: flex; flex-direction: column; }
+    .brand-title {
+      font-size: 1.1rem; font-weight: 900; letter-spacing: 1.2px;
+      background: linear-gradient(90deg, #fff, var(--purple-soft));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-motto { font-size: 0.7rem; color: var(--purple-soft); opacity: 0.9; }
+
+    .header-actions { display: flex; gap: 6px; align-items: center; }
+    .btn-icon {
+      background: var(--bg-card-light); color: var(--silver);
+      border: 1px solid var(--border-color); border-radius: 9px;
+      padding: 6px 9px; font-family: inherit; font-size: 0.74rem; font-weight: 700;
+      cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-icon:hover, .btn-icon:active { background: var(--purple-primary); border-color: var(--purple-glow); }
+    .btn-pdf { background: rgba(139, 92, 246, 0.28); border-color: var(--purple-glow); color: #fff; }
+
+    .container { max-width: 780px; margin: 0 auto; padding: 14px; }
+    .tab-section { display: none; animation: fadeIn 0.25s ease-in-out; }
+    .tab-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: linear-gradient(145deg, var(--bg-card) 0%, #10091e 100%);
+      border: 1px solid var(--border-color); border-radius: var(--radius);
+      padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); position: relative;
+    }
+    .card::before {
+      content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--purple-glow), transparent);
+    }
+
+    .section-banner {
+      text-align: center; padding: 18px 14px; margin-bottom: 16px; border-radius: var(--radius);
+      background: linear-gradient(135deg, #2a1258 0%, #120826 100%);
+      border: 1px solid rgba(196, 181, 253, 0.35); box-shadow: var(--shadow);
+    }
+    .section-banner h1 { font-size: 1.35rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .section-banner .sub-en { font-size: 0.74rem; letter-spacing: 2px; color: var(--purple-soft); text-transform: uppercase; display: block; margin-bottom: 4px; }
+    .section-banner p { font-size: 0.82rem; color: var(--silver-muted); }
+
+    .card-title {
+      font-size: 1rem; font-weight: 800; color: #fff; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 8px;
+    }
+    .badge {
+      font-size: 0.7rem; background: rgba(139, 92, 246, 0.25); color: var(--purple-soft);
+      padding: 2px 8px; border-radius: 99px; border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    label.field-label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--purple-soft); margin-bottom: 5px; margin-top: 8px; }
+    input[type="text"], input[type="date"], input[type="number"], textarea {
+      width: 100%; background: rgba(10, 6, 18, 0.75); border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 10px; padding: 9px 11px; color: #fff; font-family: inherit; font-size: 0.88rem; transition: 0.2s;
+    }
+    textarea { min-height: 74px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--purple-glow); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .pillar-spiritual { border-right: 4px solid #a78bfa; }
+    .pillar-mental    { border-right: 4px solid #38bdf8; }
+    .pillar-physical  { border-right: 4px solid #34d399; }
+    .pillar-emotional { border-right: 4px solid #f472b6; }
+
+    .habit-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .custom-check { width: 22px; height: 22px; accent-color: var(--purple-primary); cursor: pointer; flex-shrink: 0; }
+
+    .selector-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
+    .selector-bar::-webkit-scrollbar { display: none; }
+
+    .chip-btn {
+      flex: 1; min-width: max-content; padding: 8px 12px; border-radius: 11px;
+      background: var(--bg-card); border: 1px solid var(--border-color); color: var(--silver-muted);
+      font-family: inherit; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: 0.2s; text-align: center;
+    }
+    .chip-btn.active {
+      background: linear-gradient(135deg, var(--purple-primary), #4c1d95);
+      color: #fff; border-color: var(--purple-soft); box-shadow: 0 4px 14px rgba(109, 40, 217, 0.45);
+    }
+    .chip-btn .day-num-badge { display: block; font-size: 0.66rem; opacity: 0.85; }
+
+    .rating-circles { display: flex; align-items: center; gap: 6px; }
+    .circle-btn {
+      width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--purple-glow);
+      background: transparent; color: var(--silver); font-family: inherit; font-size: 0.78rem; font-weight: 800;
+      cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s;
+    }
+    .circle-btn.filled { background: var(--purple-glow); color: #fff; box-shadow: 0 0 8px rgba(139, 92, 246, 0.6); }
+
+    .task-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .task-item input[type="text"].completed-task { text-decoration: line-through; opacity: 0.65; }
+
+    .mood-bar { display: flex; justify-content: space-around; gap: 6px; margin-top: 6px; }
+    .mood-btn {
+      flex: 1; padding: 8px 4px; border-radius: 10px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-color); color: var(--silver); cursor: pointer; text-align: center; font-family: inherit; transition: 0.2s;
+    }
+    .mood-btn span.emoji { font-size: 1.3rem; display: block; }
+    .mood-btn span.label { font-size: 0.68rem; color: var(--silver-muted); }
+    .mood-btn.selected { background: rgba(139, 92, 246, 0.28); border-color: var(--purple-soft); }
+
+    .graph-wrapper {
+      background: #0c0718; border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: 12px; padding: 10px 4px; margin: 10px 0; overflow-x: auto;
+    }
+    .pillar-svg { width: 100%; min-width: 620px; height: 210px; display: block; }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .stat-box {
+      background: rgba(139, 92, 246, 0.12); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 8px; text-align: center;
+    }
+    .stat-box .stat-label { font-size: 0.7rem; color: var(--silver-muted); display: block; }
+    .stat-box .stat-val { font-size: 0.95rem; font-weight: 800; color: #fff; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; right: 0; left: 0; z-index: 200;
+      background: rgba(12, 7, 24, 0.96); backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 6px 2px;
+    }
+    .nav-item {
+      flex: 1; background: none; border: none; color: var(--silver-muted);
+      font-family: inherit; font-size: 0.7rem; font-weight: 700; display: flex;
+      flex-direction: column; align-items: center; gap: 3px; padding: 5px 2px; cursor: pointer; border-radius: 9px; transition: 0.2s;
+    }
+    .nav-item .nav-icon { font-size: 1.1rem; }
+    .nav-item.active { color: #fff; background: rgba(139, 92, 246, 0.22); }
+
+    #toast {
+      position: fixed; bottom: 78px; left: 50%; transform: translateX(-50%);
+      background: var(--purple-primary); color: #fff; padding: 7px 16px; border-radius: 99px;
+      font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 300;
+    }
+    #toast.show { opacity: 1; }
+
+    .aya-box {
+      text-align: center; padding: 14px; background: rgba(139, 92, 246, 0.1);
+      border: 1px dashed var(--purple-glow); border-radius: 12px; margin: 10px 0;
+    }
+    .aya-box .aya-text { font-size: 1.1rem; font-weight: 800; color: #fff; }
+    .Example-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
+    .Example-table th, .Example-table td { border: 1px solid var(--border-color); padding: 7px; text-align: right; }
+    .Example-table th { background: rgba(139, 92, 246, 0.2); color: var(--purple-soft); }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; font-size: 11pt !important; }
+      .top-header, .bottom-nav, .selector-bar, #toast, .btn-icon, .btn-pdf, .header-actions { display: none !important; }
+      .container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      .tab-section { display: block !important; page-break-after: always; }
+      .card {
+        background: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important;
+        color: #000 !important; page-break-inside: avoid; margin-bottom: 15px !important;
+      }
+      .card::before { display: none !important; }
+      .card-title { color: #2e1065 !important; border-bottom: 1px solid #cbd5e1 !important; }
+      .section-banner { background: #f3e8ff !important; border: 1px solid #c084fc !important; color: #000 !important; }
+      .section-banner h1, .section-banner .sub-en { color: #4c1d95 !important; }
+      input, textarea { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .stat-box { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #000 !important; }
+      .stat-box .stat-val { color: #1e1b4b !important; }
+      .graph-wrapper { background: #fff !important; border: 1px solid #ccc !important; }
+      svg text { fill: #334155 !important; }
+      svg line { stroke: #cbd5e1 !important; }
+      .badge { background: #e2e8f0 !important; color: #334155 !important; border-color: #cbd5e1 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="top-header">
+    <div class="brand-box">
+      <span class="brand-title">ALIXOR PLANNER</span>
+      <span class="brand-motto">اللهم أنت مقصودي ورضاك مطلوبي ✦</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon btn-pdf" onclick="exportMonthlyReportPDF()" title="حفظ تقرير الشهر كـ PDF">📄 تصدير PDF</button>
+      <button class="btn-icon" onclick="exportData()" title="تصدير كود JSON">💾 كود</button>
+      <button class="btn-icon" onclick="document.getElementById('importFile').click()" title="استعادة بيانات">📂 فتح</button>
+      <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)" />
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== TAB 1: رؤية الشهر ==================== -->
+    <section id="tab-vision" class="tab-section active">
+      <div class="section-banner">
+        <span class="sub-en">ALIXOR PLANNER V 1.0.0</span>
+        <h1>خطط . تأمل . ارتق</h1>
+        <p>منهجية الأركان الأربعة نحو صفوة الـ 1%</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🎯 غلاف الشهر وعهد البداية</span>
+          <span class="badge">المنطلق</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label class="field-label">الشهر (MONTH)</label>
+            <input type="text" id="cover_month" placeholder="مثال: أكتوبر 2026 / ربيع الآخر" oninput="saveField('cover_month', this.value)" />
+          </div>
+          <div>
+            <label class="field-label">النية الأساسية للشهر</label>
+            <input type="text" id="cover_intention" placeholder="ما النية التي تعقد عليها قلبك هذا الشهر؟" oninput="saveField('cover_intention', this.value)" />
+          </div>
+        </div>
+
+        <div class="aya-box">
+          <div style="font-size:0.75rem; color:var(--purple-soft);">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+          <div class="aya-text">﴿ وَأَنْ لَيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَى ﴾</div>
+          <div style="font-size:0.72rem; color:var(--silver-muted); margin-top:2px;">سورة النجم - الآية 39</div>
+        </div>
+        <div style="text-align:left; font-size:0.76rem; color:var(--purple-soft); font-weight:700;">بقلم المصمم - علي الكَلتي</div>
+      </div>
+
+      <details class="card" style="cursor:pointer;">
+        <summary style="font-weight:800; color:var(--purple-soft);">📖 دليل الاستخدام والمثال التطبيقي (اضغط للعرض)</summary>
+        <div style="margin-top:12px; font-size:0.84rem;">
+          <p><strong>1. رؤية الشهر (Monthly Vision):</strong> حدد أهدافك في الأركان الأربعة، اختر العادات التي ستبنيها، واكتب رسالتك لنفسك في نهاية الشهر.</p>
+          <p style="margin-top:6px;"><strong>2. التخطيط الأسبوعي (Weekly):</strong> اختر هدفاً رئيسياً واحداً للأسبوع، وحدد "كلمة الأسبوع" التي ستكون شعارك ودافعك خلال الأيام السبعة.</p>
+          <table class="Example-table">
+            <thead>
+              <tr>
+                <th>الركن</th>
+                <th>المهمة / الإنجاز (مثال ليوم واحد)</th>
+                <th>التقييم</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>الروحي</td><td>ورد قرآن 4 صفحات + صلاة الضحى</td><td>●●●● (4/4)</td></tr>
+              <tr><td>العقلي</td><td>محاضرة في البرمجة + مراجعة درس</td><td>●●●○ (3/4)</td></tr>
+              <tr><td>البدني</td><td>30 دقيقة مشي سريع</td><td>●●●● (4/4)</td></tr>
+              <tr><td>العاطفي</td><td>مكالمة مع صديق + تمرين مهارة التواصل</td><td>●●○○ (2/4)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🔭 رؤية الشهر (MONTHLY VISION)</span>
+          <span class="badge">الأركان الأربعة</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="card pillar-spiritual" style="margin-bottom:0;">
+            <div class="card-title"><span>🌙 الركن الروحي</span><span class="badge">Spiritual</span></div>
+            <label class="field-label">أهداف الشهر</label>
+            <textarea id="vision_spiritual_goals" placeholder="أهدافك الروحية..." oninput="saveField('vision_spiritual_goals', this.value)"></textarea>
+            <label class="field-label">العادة المستهدفة</label>
+            <div class="habit-row">
+              <input type="checkbox" class="custom-check" id="vision_spiritual_check" onchange="saveField('vision_spiritual_check', this.checked)" />
+              <input type="text" id="vision_spiritual_habit" placeholder="العادة الروحية المستهدفة..." oninput="saveField('vision_spiritual_habit', this.value)" />
+            </div>
+          </div>
+
+          <div class="card pillar-mental" style="margin-bottom:0;">
+            <div class="card-title"><span>🧠 الركن العقلي</span><span class="badge">Mental</span></div>
+            <label class="field-label">أهداف الشهر</label>
+            <textarea id="vision_mental_goals" placeholder="أهدافك العقلية والمعرفية..." oninput="saveField('vision_mental_goals', this.value)"></textarea>
+            <label class="field-label">العادة المستهدفة</label>
+            <div class="habit-row">
+              <input type="checkbox" class="custom-check" id="vision_mental_check" onchange="saveField('vision_mental_check', this.checked)" />
+              <input type="text" id="vision_mental_habit" placeholder="العادة العقلية المستهدفة..." oninput="saveField('vision_mental_habit', this.value)" />
+            </div>
+          </div>
+
+          <div class="card pillar-physical" style="margin-bottom:0;">
+            <div class="card-title"><span>⚡ الركن البدني</span><span class="badge">Physical</span></div>
+            <label class="field-label">أهداف الشهر</label>
+            <textarea id="vision_physical_goals" placeholder="أهدافك البدنية والصحية..." oninput="saveField('vision_physical_goals', this.value)"></textarea>
+            <label class="field-label">العادة المستهدفة</label>
+            <div class="habit-row">
+              <input type="checkbox" class="custom-check" id="vision_physical_check" onchange="saveField('vision_physical_check', this.checked)" />
+              <input type="text" id="vision_physical_habit" placeholder="العادة البدنية المستهدفة..." oninput="saveField('vision_physical_habit', this.value)" />
+            </div>
+          </div>
+
+          <div class="card pillar-emotional" style="margin-bottom:0;">
+            <div class="card-title"><span>🤝 الركن العاطفي (المهارات الناعمة)</span><span class="badge">Soft Skills</span></div>
+            <label class="field-label">أهداف الشهر</label>
+            <textarea id="vision_emotional_goals" placeholder="أهدافك العاطفية والاجتماعية..." oninput="saveField('vision_emotional_goals', this.value)"></textarea>
+            <label class="field-label">العادة المستهدفة</label>
+            <div class="habit-row">
+              <input type="checkbox" class="custom-check" id="vision_emotional_check" onchange="saveField('vision_emotional_check', this.checked)" />
+              <input type="text" id="vision_emotional_habit" placeholder="العادة العاطفية المستهدفة..." oninput="saveField('vision_emotional_habit', this.value)" />
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="field-label">✉️ رسالة سرية إلى نسخة نهاية الشهر</label>
+          <textarea id="vision_secret_msg" placeholder="اكتب بصدق لنسختك التي ستصل لليوم 28..." oninput="saveField('vision_secret_msg', this.value)"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: التخطيط والتقييم الأسبوعي ==================== -->
+    <section id="tab-weekly" class="tab-section">
+      <div class="selector-bar" id="weekly_selector_bar">
+        <button class="chip-btn active" onclick="selectWeekPlan(1)">الأسبوع 1</button>
+        <button class="chip-btn" onclick="selectWeekPlan(2)">الأسبوع 2</button>
+        <button class="chip-btn" onclick="selectWeekPlan(3)">الأسبوع 3</button>
+        <button class="chip-btn" onclick="selectWeekPlan(4)">الأسبوع 4</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span id="week_plan_title">📅 تخطيط الأسبوع 1</span>
+          <span class="badge">خطة الأسبوع</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label class="field-label">🎯 هدف الأسبوع الرئيسي</label>
+            <input type="text" id="w_main_goal" oninput="saveWeekField('main_goal', this.value)" />
+          </div>
+          <div>
+            <label class="field-label">🔑 كلمة الأسبوع</label>
+            <input type="text" id="w_word" oninput="saveWeekField('word', this.value)" />
+          </div>
+        </div>
+
+        <label class="field-label" style="margin-top:12px;">📌 خريطة الأيام السبعة</label>
+        <div class="grid-2" id="w_days_overview_grid"></div>
+
+        <div class="grid-2" style="margin-top:10px;">
+          <div>
+            <label class="field-label">🔥 تحدي الأسبوع</label>
+            <textarea id="w_challenge" oninput="saveWeekField('challenge', this.value)"></textarea>
+          </div>
+          <div>
+            <label class="field-label">📝 مساحة حرة للتدوين</label>
+            <textarea id="w_free_notes" oninput="saveWeekField('free_notes', this.value)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span id="week_ref_title">📊 تقييم وتحليل الأسبوع 1</span>
+          <span class="badge">حصاد الأسبوع</span>
+        </div>
+
+        <div class="stats-strip">
+          <div class="stat-box">
+            <span class="stat-label">المهام المنجزة</span>
+            <span class="stat-val" id="w_auto_tasks_done">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">متوسط النقاط</span>
+            <span class="stat-val" id="w_auto_avg_score">0%</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">العادات المحققة</span>
+            <input type="text" id="w_habits_achieved" placeholder="مثال: 4/4" style="text-align:center; padding:3px;" oninput="saveWeekField('habits_achieved', this.value)" />
+          </div>
+        </div>
+
+        <label class="field-label">⭐ تقييم الأركان للأسبوع (من 10)</label>
+        <div class="grid-2" style="grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:8px; margin-bottom:10px;">
+          <div class="stat-box">
+            <span class="stat-label">الروحي</span>
+            <input type="number" min="0" max="10" step="0.5" id="w_rate_spiritual" style="text-align:center;" oninput="saveWeekField('rate_spiritual', this.value)" />
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">العقلي</span>
+            <input type="number" min="0" max="10" step="0.5" id="w_rate_mental" style="text-align:center;" oninput="saveWeekField('rate_mental', this.value)" />
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">البدني</span>
+            <input type="number" min="0" max="10" step="0.5" id="w_rate_physical" style="text-align:center;" oninput="saveWeekField('rate_physical', this.value)" />
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">العاطفي</span>
+            <input type="number" min="0" max="10" step="0.5" id="w_rate_emotional" style="text-align:center;" oninput="saveWeekField('rate_emotional', this.value)" />
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">الأسبوع كله</span>
+            <input type="number" min="0" max="10" step="0.5" id="w_rate_overall" style="text-align:center;" oninput="saveWeekField('rate_overall', this.value)" />
+          </div>
+        </div>
+
+        <label class="field-label">1. ما أبرز إنجاز حققته هذا الأسبوع؟</label>
+        <textarea id="w_q1" oninput="saveWeekField('q1', this.value)"></textarea>
+        <label class="field-label">2. ما الذي أود تحسينه الأسبوع القادم؟</label>
+        <textarea id="w_q2" oninput="saveWeekField('q2', this.value)"></textarea>
+        <label class="field-label">3. ما الدرس الأهم الذي تعلمته؟</label>
+        <textarea id="w_q3" oninput="saveWeekField('q3', this.value)"></textarea>
+        <label class="field-label" id="w_q4_label">4. السؤال الرابع</label>
+        <textarea id="w_q4" oninput="saveWeekField('q4', this.value)"></textarea>
+        <label class="field-label" id="w_q5_label">5. السؤال الخامس</label>
+        <textarea id="w_q5" oninput="saveWeekField('q5', this.value)"></textarea>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: اليوميات (28 يوماً) ==================== -->
+    <section id="tab-daily" class="tab-section">
+      <div class="selector-bar" id="daily_week_bar">
+        <button class="chip-btn active" onclick="selectDailyWeek(1)">أسبوع 1 (1-7)</button>
+        <button class="chip-btn" onclick="selectDailyWeek(2)">أسبوع 2 (8-14)</button>
+        <button class="chip-btn" onclick="selectDailyWeek(3)">أسبوع 3 (15-21)</button>
+        <button class="chip-btn" onclick="selectDailyWeek(4)">أسبوع 4 (22-28)</button>
+      </div>
+
+      <div class="selector-bar" id="daily_day_bar"></div>
+
+      <div class="card">
+        <div class="card-title">
+          <span id="daily_header_title">السبت - الأسبوع 1</span>
+          <span class="badge">اليومية</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label class="field-label">📅 التاريخ</label>
+            <input type="date" id="d_date" onchange="saveDayField('date', this.value)" />
+          </div>
+          <div>
+            <label class="field-label">💡 عبارة اليوم</label>
+            <input type="text" id="d_quote" oninput="saveDayField('quote', this.value)" />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" id="daily_pillars_container"></div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">
+          <span>🌾 حصاد اليوم والمزاج العام</span>
+          <span class="badge">ملخص يومي</span>
+        </div>
+        <label class="field-label">حصاد اليوم</label>
+        <textarea id="d_harvest" oninput="saveDayField('harvest', this.value)"></textarea>
+
+        <label class="field-label">😊 المزاج (MOOD)</label>
+        <div class="mood-bar" id="d_mood_bar">
+          <button class="mood-btn" onclick="setDayMood(5)"><span class="emoji">🤩</span><span class="label">متفائل</span></button>
+          <button class="mood-btn" onclick="setDayMood(4)"><span class="emoji">🙂</span><span class="label">راضٍ</span></button>
+          <button class="mood-btn" onclick="setDayMood(3)"><span class="emoji">😐</span><span class="label">متوازن</span></button>
+          <button class="mood-btn" onclick="setDayMood(2)"><span class="emoji">😓</span><span class="label">مرهق</span></button>
+          <button class="mood-btn" onclick="setDayMood(1)"><span class="emoji">😔</span><span class="label">مشتت</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: خرائط التتبع الشهرية ==================== -->
+    <section id="tab-graphs" class="tab-section">
+      <div class="section-banner">
+        <span class="sub-en">MONTHLY PILLAR GRAPHS</span>
+        <h1>📈 خرائط التتبع الشهرية للأركان الأربعة</h1>
+        <p>تتحدث هذه المنحنيات تلقائياً فور تقييمك لأي يوم من الأيام الـ 28</p>
+      </div>
+
+      <div id="graphs_master_container"></div>
+    </section>
+
+    <!-- ==================== TAB 5: حصاد الشهر والخاتمة ==================== -->
+    <section id="tab-review" class="tab-section">
+      <div class="section-banner">
+        <span class="sub-en">END OF MONTH REVIEW & STRATEGIC GROWTH</span>
+        <h1>🏆 تقييم الشهر والنمو الاستراتيجي</h1>
+        <p>مراجعة شاملة لحصاد الـ 28 يوماً</p>
+      </div>
+
+      <div class="card" style="border:1px solid var(--purple-glow); background: rgba(109, 40, 217, 0.15); text-align: center;">
+        <div class="card-title" style="justify-content: center;">
+          <span>📑 أرشفة الشهر كملف PDF</span>
+        </div>
+        <p style="font-size:0.84rem; margin-bottom:10px;">احفظ إنجازات هذا الشهر كاملة بتقرير منسق ومطبوع قبل الانتقال للشهر القادم:</p>
+        <button class="btn-icon btn-pdf" style="padding:10px 22px; font-size:0.9rem; margin: 0 auto;" onclick="exportMonthlyReportPDF()">
+          📄 حفظ وأرشفة الشهر بصيغة PDF الآن
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📋 تقييم الشهر والدروس المستفادة</span>
+          <span class="badge">الحصاد الشهري</span>
+        </div>
+        <label class="field-label">🌟 أبرز إنجازات الشهر</label>
+        <textarea id="m_achievements" oninput="saveField('m_achievements', this.value)"></textarea>
+        <label class="field-label">🚧 التحديات والعقبات</label>
+        <textarea id="m_challenges" oninput="saveField('m_challenges', this.value)"></textarea>
+        <label class="field-label">💡 الدروس المستفادة</label>
+        <textarea id="m_lessons" oninput="saveField('m_lessons', this.value)"></textarea>
+
+        <label class="field-label" style="margin-top:10px;">📊 التقييم الختامي للأركان الأربعة (من 10)</label>
+        <div class="grid-2" style="grid-template-columns: repeat(4, 1fr); gap:8px;">
+          <div class="stat-box"><span class="stat-label">الروحي</span><input type="number" min="0" max="10" step="0.5" id="m_rate_spiritual" style="text-align:center;" oninput="saveField('m_rate_spiritual', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">العقلي</span><input type="number" min="0" max="10" step="0.5" id="m_rate_mental" style="text-align:center;" oninput="saveField('m_rate_mental', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">البدني</span><input type="number" min="0" max="10" step="0.5" id="m_rate_physical" style="text-align:center;" oninput="saveField('m_rate_physical', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">العاطفي</span><input type="number" min="0" max="10" step="0.5" id="m_rate_emotional" style="text-align:center;" oninput="saveField('m_rate_emotional', this.value)" /></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🚀 النمو الاستراتيجي والمستقبل</span>
+          <span class="badge">الرؤية المستقبلية</span>
+        </div>
+        <label class="field-label">💭 الأفكار الكبيرة للشهر القادم</label>
+        <textarea id="m_next_big_ideas" oninput="saveField('m_next_big_ideas', this.value)"></textarea>
+        <label class="field-label">🎯 أهداف الشهر القادم</label>
+        <textarea id="m_next_goals" oninput="saveField('m_next_goals', this.value)"></textarea>
+        <label class="field-label">🤲 شكري لله هذا الشهر</label>
+        <textarea id="m_gratitude" oninput="saveField('m_gratitude', this.value)"></textarea>
+        <label class="field-label">✉️ رسالة لنفسي في نهاية العام</label>
+        <textarea id="m_year_end_msg" oninput="saveField('m_year_end_msg', this.value)"></textarea>
+      </div>
+
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="justify-content:center;">
+          <span>✨ رحلتك نحو صفوة الـ 1% لا تنتهي هنا</span>
+        </div>
+        <p style="font-size:0.84rem; margin-bottom:12px;">تواصل مع مصمم ALIXOR Planner: <strong>@ALI_ALKALTI</strong> | 0936869823</p>
+        <hr style="border:none; border-top:1px solid var(--border-color); margin:12px 0;" />
+        <button class="btn-icon" style="background:rgba(239, 68, 68, 0.2); border-color:var(--danger); color:#fca5a5; padding:8px 16px; margin: 0 auto;" onclick="resetAllMonthData()">
+          🗑️ مسح بيانات الشهر وبدء شهر جديد
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('tab-vision', this)">
+      <span class="nav-icon">🧭</span>
+      <span>رؤية الشهر</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-weekly', this)">
+      <span class="nav-icon">📅</span>
+      <span>الأسبوعي</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-daily', this)">
+      <span class="nav-icon">✍️</span>
+      <span>اليوميات</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-graphs', this)">
+      <span class="nav-icon">📈</span>
+      <span>خرائط التتبع</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tab-review', this)">
+      <span class="nav-icon">🏆</span>
+      <span>حصاد الشهر</span>
+    </button>
+  </nav>
+
+  <div id="toast">تم الحفظ تلقائياً ✓</div>
+
+  <script>
+    const STORAGE_KEY = 'ALIXOR_PLANNER_V1_DATA';
+    const DAYS_AR = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+    const DAYS_EN = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
+    const PILLARS = [
+      { key: 'spiritual', name: 'الركن الروحي', sub: 'Spiritual', icon: '🌙', color: '#a78bfa', css: 'pillar-spiritual' },
+      { key: 'mental',    name: 'الركن العقلي', sub: 'Mental',    icon: '🧠', color: '#38bdf8', css: 'pillar-mental' },
+      { key: 'physical',  name: 'الركن البدني', sub: 'Physical',  icon: '⚡', color: '#34d399', css: 'pillar-physical' },
+      { key: 'emotional', name: 'الركن العاطفي (المهارات الناعمة)', sub: 'Soft Skills', icon: '🤝', color: '#f472b6', css: 'pillar-emotional' }
+    ];
+
+    const WEEKLY_DYNAMIC_QUESTIONS = {
+      1: { q4: '4. ما النية التي بدأت بها هذا الشهر، وهل ما زلت ثابتاً عليها؟', q5: '5. ما أول خطوة عملية اتخذتها لتحقيق رؤية هذا الشهر؟' },
+      2: { q4: '4. ما العادة التي حافظت على استمراريتها هذا الأسبوع رغم المشاغل؟', q5: '5. كيف كانت حالتي الروحية والعاطفية مقارنة بالأسبوع الماضي؟' },
+      3: { q4: '4. ما أكبر عقبة واجهتك هذا الأسبوع، وكيف تعاملت معها؟', q5: '5. ما الذي سيساعدك على تجاوز نفس العقبة لو تكررت الأسبوع القادم؟' },
+      4: { q4: '4. بالنظر إلى الأسابيع الأربعة، ما أكثر ما أنت فخور بإنجازه هذا الشهر؟', q5: '5. ما الذي تريد أن تحمله معك إلى مراجعة الشهر القادم؟' }
+    };
+
+    let appData = loadInitialData();
+    let currentWeekPlan = 1;
+    let currentDailyWeek = 1;
+    let currentDayIndex = 1;
+
+    function createDefaultData() {
+      const data = {
+        fields: {},
+        weeks: {},
+        days: {},
+        graphsMeta: { spiritual: { reason: '' }, mental: { reason: '' }, physical: { reason: '' }, emotional: { reason: '' } }
+      };
+
+      for (let w = 1; w <= 4; w++) {
+        data.weeks[w] = {
+          main_goal: '', word: '', challenge: '', free_notes: '',
+          days_overview: ['', '', '', '', '', '', ''], habits_achieved: '',
+          rate_spiritual: '', rate_mental: '', rate_physical: '', rate_emotional: '', rate_overall: '',
+          q1: '', q2: '', q3: '', q4: '', q5: ''
+        };
+      }
+
+      for (let d = 1; d <= 28; d++) {
+        data.days[d] = {
+          date: '', quote: '', harvest: '', mood: 0,
+          pillars: {
+            spiritual: { score: 0, tasks: [{ text: '', done: false }, { text: '', done: false }, { text: '', done: false }] },
+            mental:    { score: 0, tasks: [{ text: '', done: false }, { text: '', done: false }, { text: '', done: false }] },
+            physical:  { score: 0, tasks: [{ text: '', done: false }, { text: '', done: false }, { text: '', done: false }] },
+            emotional: { score: 0, tasks: [{ text: '', done: false }, { text: '', done: false }, { text: '', done: false }] }
+          }
+        };
+      }
+      return data;
+    }
+
+    function loadInitialData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return createDefaultData();
+        return Object.assign(createDefaultData(), JSON.parse(raw));
+      } catch (e) {
+        return createDefaultData();
+      }
+    }
+
+    function persistData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+      showToast();
+    }
+
+    let toastTimeout;
+    function showToast(msg = 'تم الحفظ تلقائياً ✓') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => t.classList.remove('show'), 1400);
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (tabId === 'tab-weekly') renderWeekPlan(currentWeekPlan);
+      if (tabId === 'tab-daily') renderDailyView();
+      if (tabId === 'tab-graphs') renderAllGraphs();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function saveField(key, val) {
+      appData.fields[key] = val;
+      persistData();
+    }
+
+    function loadStaticFields() {
+      const textIds = [
+        'cover_month', 'cover_intention',
+        'vision_spiritual_goals', 'vision_spiritual_habit',
+        'vision_mental_goals', 'vision_mental_habit',
+        'vision_physical_goals', 'vision_physical_habit',
+        'vision_emotional_goals', 'vision_emotional_habit',
+        'vision_secret_msg',
+        'm_achievements', 'm_challenges', 'm_lessons',
+        'm_rate_spiritual', 'm_rate_mental', 'm_rate_physical', 'm_rate_emotional',
+        'm_next_big_ideas', 'm_next_goals', 'm_gratitude', 'm_year_end_msg'
+      ];
+      textIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && appData.fields[id] !== undefined) el.value = appData.fields[id];
+      });
+
+      const checkIds = [
+        'vision_spiritual_check', 'vision_mental_check',
+        'vision_physical_check', 'vision_emotional_check'
+      ];
+      checkIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = !!appData.fields[id];
+      });
+    }
+
+    function selectWeekPlan(weekNum) {
+      currentWeekPlan = weekNum;
+      document.querySelectorAll('#weekly_selector_bar .chip-btn').forEach((b, idx) => b.classList.toggle('active', idx + 1 === weekNum));
+      renderWeekPlan(weekNum);
+    }
+
+    function renderWeekPlan(w) {
+      const wData = appData.weeks[w];
+      const meta = WEEKLY_DYNAMIC_QUESTIONS[w];
+
+      document.getElementById('week_plan_title').textContent = `📅 تخطيط الأسبوع ${w}`;
+      document.getElementById('week_ref_title').textContent = `📊 تقييم وتحليل الأسبوع ${w}`;
+
+      document.getElementById('w_main_goal').value = wData.main_goal || '';
+      document.getElementById('w_word').value = wData.word || '';
+      document.getElementById('w_challenge').value = wData.challenge || '';
+      document.getElementById('w_free_notes').value = wData.free_notes || '';
+
+      const grid = document.getElementById('w_days_overview_grid');
+      grid.innerHTML = '';
+      DAYS_AR.forEach((dayName, idx) => {
+        const dayGlobalIndex = (w - 1) * 7 + idx + 1;
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <label class="field-label" style="display:flex; justify-content:space-between;">
+            <span>${dayName}</span>
+            <a href="javascript:void(0)" onclick="jumpToDay(${w}, ${dayGlobalIndex})" style="color:var(--purple-glow); font-size:0.75rem; text-decoration:none;">فتح اليوم ${dayGlobalIndex} ⬅</a>
+          </label>
+          <input type="text" placeholder="مهام ${dayName}..." value="${(wData.days_overview[idx] || '').replace(/"/g, '&quot;')}" oninput="saveWeekDayOverview(${idx}, this.value)" />
+        `;
+        grid.appendChild(div);
+      });
+
+      const startDay = (w - 1) * 7 + 1;
+      const endDay = w * 7;
+      let completedTasks = 0;
+      let totalPoints = 0;
+      const pillarTotals = { spiritual: 0, mental: 0, physical: 0, emotional: 0 };
+
+      for (let d = startDay; d <= endDay; d++) {
+        const dObj = appData.days[d];
+        PILLARS.forEach(p => {
+          const pData = dObj.pillars[p.key];
+          totalPoints += (pData.score || 0);
+          pillarTotals[p.key] += (pData.score || 0);
+          pData.tasks.forEach(t => { if (t.done && t.text.trim() !== '') completedTasks++; });
+        });
+      }
+
+      const avgPct = Math.round((totalPoints / 112) * 100);
+      document.getElementById('w_auto_tasks_done').textContent = completedTasks;
+      document.getElementById('w_auto_avg_score').textContent = `${avgPct}% (${totalPoints}/112)`;
+      document.getElementById('w_habits_achieved').value = wData.habits_achieved || '';
+
+      PILLARS.forEach(p => {
+        const inputEl = document.getElementById(`w_rate_${p.key}`);
+        inputEl.placeholder = `محسوب: ${((pillarTotals[p.key] / 28) * 10).toFixed(1)}`;
+        inputEl.value = wData[`rate_${p.key}`] || '';
+      });
+
+      const overallEl = document.getElementById('w_rate_overall');
+      overallEl.placeholder = `محسوب: ${((totalPoints / 112) * 10).toFixed(1)}`;
+      overallEl.value = wData.rate_overall || '';
+
+      document.getElementById('w_q4_label').textContent = meta.q4;
+      document.getElementById('w_q5_label').textContent = meta.q5;
+      ['q1', 'q2', 'q3', 'q4', 'q5'].forEach(qKey => {
+        document.getElementById(`w_${qKey}`).value = wData[qKey] || '';
+      });
+    }
+
+    function saveWeekField(fieldKey, val) {
+      appData.weeks[currentWeekPlan][fieldKey] = val;
+      persistData();
+    }
+
+    function saveWeekDayOverview(dayIdx, val) {
+      appData.weeks[currentWeekPlan].days_overview[dayIdx] = val;
+      persistData();
+    }
+
+    function jumpToDay(weekNum, dayGlobalIndex) {
+      currentDailyWeek = weekNum;
+      currentDayIndex = dayGlobalIndex;
+      const navBtns = document.querySelectorAll('.bottom-nav .nav-item');
+      switchTab('tab-daily', navBtns[2]);
+    }
+
+    function selectDailyWeek(w) {
+      currentDailyWeek = w;
+      currentDayIndex = (w - 1) * 7 + 1;
+      renderDailyView();
+    }
+
+    function selectDay(dayIndex) {
+      currentDayIndex = dayIndex;
+      currentDailyWeek = Math.ceil(dayIndex / 7);
+      renderDailyView();
+    }
+
+    function renderDailyView() {
+      document.querySelectorAll('#daily_week_bar .chip-btn').forEach((b, idx) => b.classList.toggle('active', idx + 1 === currentDailyWeek));
+
+      const dayBar = document.getElementById('daily_day_bar');
+      dayBar.innerHTML = '';
+      const startDay = (currentDailyWeek - 1) * 7 + 1;
+
+      for (let i = 0; i < 7; i++) {
+        const dNum = startDay + i;
+        const dObj = appData.days[dNum];
+        const dayTotalScore = PILLARS.reduce((acc, p) => acc + (dObj.pillars[p.key].score || 0), 0);
+        const btn = document.createElement('button');
+        btn.className = 'chip-btn' + (dNum === currentDayIndex ? ' active' : '');
+        btn.onclick = () => selectDay(dNum);
+        btn.innerHTML = `<span>${DAYS_AR[i]}</span><span class="day-num-badge">يوم ${dNum} (${dayTotalScore}/16)</span>`;
+        dayBar.appendChild(btn);
+      }
+
+      const dayInWeekIdx = (currentDayIndex - 1) % 7;
+      document.getElementById('daily_header_title').textContent = `${DAYS_AR[dayInWeekIdx]} - الأسبوع ${currentDailyWeek} | اليوم ${currentDayIndex} من 28`;
+
+      const curDayData = appData.days[currentDayIndex];
+      document.getElementById('d_date').value = curDayData.date || '';
+      document.getElementById('d_quote').value = curDayData.quote || '';
+      document.getElementById('d_harvest').value = curDayData.harvest || '';
+
+      document.querySelectorAll('#d_mood_bar .mood-btn').forEach((btn, idx) => {
+        btn.classList.toggle('selected', curDayData.mood === (5 - idx));
+      });
+
+      const container = document.getElementById('daily_pillars_container');
+      container.innerHTML = '';
+
+      PILLARS.forEach(p => {
+        const pState = curDayData.pillars[p.key];
+        const card = document.createElement('div');
+        card.className = `card ${p.css}`;
+        card.style.marginBottom = '0';
+
+        let circlesHtml = '';
+        for (let c = 1; c <= 4; c++) {
+          circlesHtml += `<button type="button" class="circle-btn ${c <= (pState.score || 0) ? 'filled' : ''}" onclick="setPillarScore('${p.key}', ${c})">${c}</button>`;
+        }
+
+        let tasksHtml = '';
+        pState.tasks.forEach((taskObj, tIdx) => {
+          tasksHtml += `
+            <div class="task-item">
+              <input type="checkbox" class="custom-check" ${taskObj.done ? 'checked' : ''} onchange="togglePillarTask('${p.key}', ${tIdx}, this.checked)" />
+              <input type="text" class="${taskObj.done ? 'completed-task' : ''}" placeholder="مهمة ${tIdx + 1}..." value="${(taskObj.text || '').replace(/"/g, '&quot;')}" oninput="updatePillarTaskText('${p.key}', ${tIdx}, this.value)" />
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="card-title">
+            <span>${p.icon} ${p.name}</span>
+            <div class="rating-circles">${circlesHtml}</div>
+          </div>
+          <div>${tasksHtml}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function saveDayField(field, value) {
+      appData.days[currentDayIndex][field] = value;
+      persistData();
+    }
+
+    function setDayMood(val) {
+      const current = appData.days[currentDayIndex].mood;
+      appData.days[currentDayIndex].mood = (current === val) ? 0 : val;
+      persistData();
+      renderDailyView();
+    }
+
+    function setPillarScore(pillarKey, clickedScore) {
+      const pObj = appData.days[currentDayIndex].pillars[pillarKey];
+      pObj.score = (pObj.score === clickedScore) ? 0 : clickedScore;
+      persistData();
+      renderDailyView();
+      showToast(`تم تسجيل (${pObj.score}/4) في خارطة الركن 📈`);
+    }
+
+    function togglePillarTask(pillarKey, taskIdx, isDone) {
+      appData.days[currentDayIndex].pillars[pillarKey].tasks[taskIdx].done = isDone;
+      persistData();
+      renderDailyView();
+    }
+
+    function updatePillarTaskText(pillarKey, taskIdx, textVal) {
+      appData.days[currentDayIndex].pillars[pillarKey].tasks[taskIdx].text = textVal;
+      persistData();
+    }
+
+    function renderAllGraphs() {
+      const container = document.getElementById('graphs_master_container');
+      container.innerHTML = '';
+
+      PILLARS.forEach(p => {
+        const scores = [];
+        let maxScore = -1, minScore = 5;
+        let strongestDays = [], weakestDays = [];
+        let totalPillarPoints = 0;
+
+        for (let d = 1; d <= 28; d++) {
+          const s = appData.days[d].pillars[p.key].score || 0;
+          scores.push(s);
+          totalPillarPoints += s;
+          if (s > 0) {
+            if (s > maxScore) { maxScore = s; strongestDays = [d]; }
+            else if (s === maxScore) { strongestDays.push(d); }
+            if (s < minScore) { minScore = s; weakestDays = [d]; }
+            else if (s === minScore) { weakestDays.push(d); }
+          }
+        }
+
+        const strongestText = maxScore > 0 ? `اليوم (${strongestDays.slice(0, 3).join('، ')}) — ${maxScore}/4` : 'لا يوجد بعد';
+        const weakestText = minScore < 5 ? `اليوم (${weakestDays.slice(0, 3).join('، ')}) — ${minScore}/4` : 'لا يوجد بعد';
+
+        const svgWidth = 680, svgHeight = 200, padLeft = 32, padRight = 16, padTop = 20, padBottom = 30;
+        const plotW = svgWidth - padLeft - padRight;
+        const plotH = svgHeight - padTop - padBottom;
+        const getX = (d) => padLeft + ((d - 1) / 27) * plotW;
+        const getY = (val) => padTop + plotH - (val / 4) * plotH;
+
+        let gridLinesHtml = '';
+        for (let val = 0; val <= 4; val++) {
+          const y = getY(val);
+          gridLinesHtml += `
+            <line x1="${padLeft}" y1="${y}" x2="${svgWidth - padRight}" y2="${y}" stroke="rgba(255,255,255,0.1)" stroke-dasharray="${val === 0 ? 'none' : '4,4'}" />
+            <text x="${padLeft - 10}" y="${y + 4}" fill="#94a3b8" font-size="11" text-anchor="middle">${val}</text>
+          `;
+        }
+
+        let xLabelsHtml = '';
+        for (let d = 1; d <= 28; d++) {
+          const x = getX(d);
+          gridLinesHtml += `<line x1="${x}" y1="${padTop}" x2="${x}" y2="${padTop + plotH}" stroke="${d % 7 === 0 ? 'rgba(139,92,246,0.35)' : 'rgba(255,255,255,0.05)'}" />`;
+          xLabelsHtml += `<text x="${x}" y="${svgHeight - 10}" fill="${scores[d - 1] > 0 ? '#fff' : '#64748b'}" font-size="10" text-anchor="middle">${d}</text>`;
+        }
+
+        const pointsStr = scores.map((s, idx) => `${getX(idx + 1)},${getY(s)}`).join(' ');
+        const areaPointsStr = `${getX(1)},${getY(0)} ${pointsStr} ${getX(28)},${getY(0)}`;
+
+        let circlesSvg = '';
+        scores.forEach((s, idx) => {
+          const dNum = idx + 1;
+          circlesSvg += `<circle cx="${getX(dNum)}" cy="${getY(s)}" r="${s > 0 ? 5 : 3}" fill="${s > 0 ? p.color : '#1e1b4b'}" stroke="#fff" stroke-width="1.5" />`;
+        });
+
+        const card = document.createElement('div');
+        card.className = `card ${p.css}`;
+        card.innerHTML = `
+          <div class="card-title">
+            <span>${p.icon} ${p.name}</span>
+            <span class="badge">المجموع: ${totalPillarPoints}/112</span>
+          </div>
+          <div class="graph-wrapper" dir="ltr">
+            <svg class="pillar-svg" viewBox="0 0 ${svgWidth} ${svgHeight}">
+              <defs>
+                <linearGradient id="grad_${p.key}" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="${p.color}" stop-opacity="0.35" />
+                  <stop offset="100%" stop-color="${p.color}" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              ${gridLinesHtml}
+              <polygon points="${areaPointsStr}" fill="url(#grad_${p.key})" />
+              <polyline fill="none" stroke="${p.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pointsStr}" />
+              ${circlesSvg}
+              ${xLabelsHtml}
+            </svg>
+          </div>
+          <div class="grid-2">
+            <div class="stat-box" style="text-align:right;"><span class="stat-label">🔥 أقوى يوم:</span><span class="stat-val" style="color:var(--success); font-size:0.84rem;">${strongestText}</span></div>
+            <div class="stat-box" style="text-align:right;"><span class="stat-label">⚠️ أضعف يوم:</span><span class="stat-val" style="color:var(--gold-accent); font-size:0.84rem;">${weakestText}</span></div>
+          </div>
+          <label class="field-label">سبب الارتفاع / الانخفاض:</label>
+          <input type="text" value="${(appData.graphsMeta[p.key]?.reason || '').replace(/"/g, '&quot;')}" oninput="saveGraphReason('${p.key}', this.value)" />
+        `;
+        container.appendChild
