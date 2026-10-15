@@ -31,7 +31,8 @@
       background: radial-gradient(circle at top, #1e103a 0%, var(--bg-dark) 70%);
       color: var(--silver);
       min-height: 100vh;
-      padding-bottom: 95px;
+      /* تم زيادة المساحة السفلية لضمان عدم تداخل التبويبات مع المحتوى */
+      padding-bottom: 120px; 
       line-height: 1.6;
     }
 
@@ -160,25 +161,26 @@
     .stat-box .stat-label { font-size: 0.7rem; color: var(--silver-muted); display: block; }
     .stat-box .stat-val { font-size: 0.95rem; font-weight: 800; color: #fff; }
 
-    /* شريط التنقل السفلي السريع */
+    /* شريط التنقل السفلي المحصّن */
     .bottom-nav {
-      position: fixed; bottom: 0; right: 0; left: 0; z-index: 200;
-      background: #0f081e; border-top: 1px solid var(--border-color);
-      display: flex; justify-content: space-around; padding: 8px 2px;
+      position: fixed; bottom: 0; right: 0; left: 0; z-index: 9999;
+      background: #0f081e; border-top: 1px solid var(--purple-primary);
+      display: flex; justify-content: space-around; padding: 10px 2px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
+      width: 100%;
     }
     .nav-item {
       flex: 1; background: none; border: none; color: var(--silver-muted);
       font-family: inherit; font-size: 0.72rem; font-weight: 700; display: flex;
       flex-direction: column; align-items: center; gap: 4px; padding: 6px 2px; cursor: pointer; border-radius: 9px;
     }
-    .nav-item .nav-icon { font-size: 1.15rem; }
+    .nav-item .nav-icon { font-size: 1.25rem; margin-bottom: 2px; }
     .nav-item.active { color: #fff; background: rgba(139, 92, 246, 0.28); }
 
-    /* نافذة منبثقة بسيطة لاستيراد الكود */
     .modal-overlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
-      z-index: 500; display: none; align-items: center; justify-content: center; padding: 16px;
+      z-index: 10000; display: none; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.active { display: flex; }
     .modal-card {
@@ -187,10 +189,10 @@
     }
 
     #toast {
-      position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%);
-      background: var(--purple-primary); color: #fff; padding: 7px 18px; border-radius: 99px;
-      font-size: 0.82rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 300;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%);
+      background: var(--purple-primary); color: #fff; padding: 8px 20px; border-radius: 99px;
+      font-size: 0.85rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8); white-space: nowrap;
     }
     #toast.show { opacity: 1; }
 
@@ -213,9 +215,8 @@
       <span class="brand-motto">اللهم أنت مقصودي ورضاك مطلوبي ✦</span>
     </div>
     <div class="header-actions">
-      <!-- زر نسخ الكود وزر الاستيراد المطلوبين -->
-      <button type="button" class="btn-icon btn-accent" onclick="copyDataToClipboard()" title="نسخ بيانات الشهر ككود للحافظة">📋 نسخ الكود</button>
-      <button type="button" class="btn-icon" onclick="openImportModal()" title="لصق واستعادة كود سابق">📥 استيراد</button>
+      <button type="button" class="btn-icon btn-accent" onclick="copyDataToClipboard()">📋 نسخ الكود</button>
+      <button type="button" class="btn-icon" onclick="openImportModal()">📥 استيراد</button>
     </div>
   </header>
 
@@ -253,32 +254,14 @@
         <div style="text-align:left; font-size:0.76rem; color:var(--purple-soft); font-weight:700;">بقلم المصمم - علي الكَلتي</div>
       </div>
 
-      <details class="card" style="cursor:pointer;">
-        <summary style="font-weight:800; color:var(--purple-soft);">📖 دليل الاستخدام والمثال التطبيقي (اضغط للعرض)</summary>
-        <div style="margin-top:12px; font-size:0.84rem;">
-          <p><strong>1. رؤية الشهر:</strong> حدد أهدافك في الأركان الأربعة، اختر العادات التي ستبنيها.</p>
-          <p style="margin-top:6px;"><strong>2. التخطيط الأسبوعي:</strong> اختر هدفاً رئيسياً واحداً للأسبوع وكلمة الأسبوع.</p>
-          <table class="Example-table">
-            <thead><tr><th>الركن</th><th>المهمة (مثال ليوم واحد)</th><th>التقييم</th></tr></thead>
-            <tbody>
-              <tr><td>الروحي</td><td>ورد قرآن 4 صفحات + صلاة الضحى</td><td>●●●● (4/4)</td></tr>
-              <tr><td>العقلي</td><td>محاضرة في البرمجة + مراجعة درس</td><td>●●●○ (3/4)</td></tr>
-              <tr><td>البدني</td><td>30 دقيقة مشي سريع</td><td>●●●● (4/4)</td></tr>
-              <tr><td>العاطفي</td><td>مكالمة مع صديق + مهارة التواصل</td><td>●●○○ (2/4)</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
-
       <div class="card">
         <div class="card-title">
           <span>🔭 رؤية الشهر (MONTHLY VISION)</span>
           <span class="badge">الأركان الأربعة</span>
         </div>
-
         <div class="grid-2">
           <div class="card pillar-spiritual" style="margin-bottom:0;">
-            <div class="card-title"><span>🌙 الركن الروحي</span><span class="badge">Spiritual</span></div>
+            <div class="card-title"><span>🌙 الركن الروحي</span></div>
             <label class="field-label">أهداف الشهر</label>
             <textarea id="vision_spiritual_goals" oninput="saveField('vision_spiritual_goals', this.value)"></textarea>
             <label class="field-label">العادة المستهدفة</label>
@@ -289,7 +272,7 @@
           </div>
 
           <div class="card pillar-mental" style="margin-bottom:0;">
-            <div class="card-title"><span>🧠 الركن العقلي</span><span class="badge">Mental</span></div>
+            <div class="card-title"><span>🧠 الركن العقلي</span></div>
             <label class="field-label">أهداف الشهر</label>
             <textarea id="vision_mental_goals" oninput="saveField('vision_mental_goals', this.value)"></textarea>
             <label class="field-label">العادة المستهدفة</label>
@@ -300,7 +283,7 @@
           </div>
 
           <div class="card pillar-physical" style="margin-bottom:0;">
-            <div class="card-title"><span>⚡ الركن البدني</span><span class="badge">Physical</span></div>
+            <div class="card-title"><span>⚡ الركن البدني</span></div>
             <label class="field-label">أهداف الشهر</label>
             <textarea id="vision_physical_goals" oninput="saveField('vision_physical_goals', this.value)"></textarea>
             <label class="field-label">العادة المستهدفة</label>
@@ -311,7 +294,7 @@
           </div>
 
           <div class="card pillar-emotional" style="margin-bottom:0;">
-            <div class="card-title"><span>🤝 الركن العاطفي</span><span class="badge">Soft Skills</span></div>
+            <div class="card-title"><span>🤝 الركن العاطفي</span></div>
             <label class="field-label">أهداف الشهر</label>
             <textarea id="vision_emotional_goals" oninput="saveField('vision_emotional_goals', this.value)"></textarea>
             <label class="field-label">العادة المستهدفة</label>
@@ -329,7 +312,7 @@
       </div>
     </section>
 
-    <!-- TAB 2: التخطيط والتقييم الأسبوعي -->
+    <!-- TAB 2: التخطيط الأسبوعي -->
     <section id="tab-weekly" class="tab-section">
       <div class="selector-bar" id="weekly_selector_bar">
         <button type="button" class="chip-btn active" onclick="selectWeekPlan(1)">الأسبوع 1</button>
@@ -340,56 +323,43 @@
 
       <div class="card">
         <div class="card-title">
-          <span id="week_plan_title">📅 تخطيط الأسبوع 1</span>
-          <span class="badge">خطة الأسبوع</span>
+          <span id="week_plan_title">📅 تخطيط الأسبوع</span>
         </div>
         <div class="grid-2">
-          <div>
-            <label class="field-label">🎯 هدف الأسبوع الرئيسي</label>
-            <input type="text" id="w_main_goal" oninput="saveWeekField('main_goal', this.value)" />
-          </div>
-          <div>
-            <label class="field-label">🔑 كلمة الأسبوع</label>
-            <input type="text" id="w_word" oninput="saveWeekField('word', this.value)" />
-          </div>
+          <div><label class="field-label">🎯 هدف الأسبوع</label><input type="text" id="w_main_goal" oninput="saveWeekField('main_goal', this.value)" /></div>
+          <div><label class="field-label">🔑 كلمة الأسبوع</label><input type="text" id="w_word" oninput="saveWeekField('word', this.value)" /></div>
         </div>
-
         <label class="field-label" style="margin-top:12px;">📌 خريطة الأيام السبعة</label>
         <div class="grid-2" id="w_days_overview_grid"></div>
-
         <div class="grid-2" style="margin-top:10px;">
-          <div>
-            <label class="field-label">🔥 تحدي الأسبوع</label>
-            <textarea id="w_challenge" oninput="saveWeekField('challenge', this.value)"></textarea>
-          </div>
-          <div>
-            <label class="field-label">📝 مساحة حرة للتدوين</label>
-            <textarea id="w_free_notes" oninput="saveWeekField('free_notes', this.value)"></textarea>
-          </div>
+          <div><label class="field-label">🔥 التحدي</label><textarea id="w_challenge" oninput="saveWeekField('challenge', this.value)"></textarea></div>
+          <div><label class="field-label">📝 ملاحظات</label><textarea id="w_free_notes" oninput="saveWeekField('free_notes', this.value)"></textarea></div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-title">
-          <span id="week_ref_title">📊 تقييم وتحليل الأسبوع 1</span>
-          <span class="badge">حصاد الأسبوع</span>
+          <span id="week_ref_title">📊 تقييم الأسبوع</span>
         </div>
-
         <div class="stats-strip">
-          <div class="stat-box">
-            <span class="stat-label">المهام المنجزة</span>
-            <span class="stat-val" id="w_auto_tasks_done">0</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-label">متوسط النقاط</span>
-            <span class="stat-val" id="w_auto_avg_score">0%</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-label">العادات المحققة</span>
-            <input type="text" id="w_habits_achieved" placeholder="مثال: 4/4" style="text-align:center; padding:3px;" oninput="saveWeekField('habits_achieved', this.value)" />
-          </div>
+          <div class="stat-box"><span class="stat-label">المهام</span><span class="stat-val" id="w_auto_tasks_done">0</span></div>
+          <div class="stat-box"><span class="stat-label">النقاط</span><span class="stat-val" id="w_auto_avg_score">0%</span></div>
+          <div class="stat-box"><span class="stat-label">العادات</span><input type="text" id="w_habits_achieved" style="text-align:center; padding:3px;" oninput="saveWeekField('habits_achieved', this.value)" /></div>
         </div>
-
-        <label class="field-label">⭐ تقييم الأركان للأسبوع (من 10)</label>
+        <label class="field-label">⭐ التقييم من 10</label>
         <div class="grid-2" style="grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:8px; margin-bottom:10px;">
-          <div class="stat-box"><span class="stat-label">الروحي</span><input type="number" min="0" max="10" step="0.5" id="w_rate_spiritual" style="text-align:center;" oninput="saveWeekField('rate_spiritual', this.value)" /
+          <div class="stat-box"><span class="stat-label">الروحي</span><input type="number" min="0" max="10" step="0.5" id="w_rate_spiritual" style="text-align:center;" oninput="saveWeekField('rate_spiritual', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">العقلي</span><input type="number" min="0" max="10" step="0.5" id="w_rate_mental" style="text-align:center;" oninput="saveWeekField('rate_mental', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">البدني</span><input type="number" min="0" max="10" step="0.5" id="w_rate_physical" style="text-align:center;" oninput="saveWeekField('rate_physical', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">العاطفي</span><input type="number" min="0" max="10" step="0.5" id="w_rate_emotional" style="text-align:center;" oninput="saveWeekField('rate_emotional', this.value)" /></div>
+          <div class="stat-box"><span class="stat-label">العام</span><input type="number" min="0" max="10" step="0.5" id="w_rate_overall" style="text-align:center;" oninput="saveWeekField('rate_overall', this.value)" /></div>
+        </div>
+        <label class="field-label">1. أبرز إنجاز؟</label><textarea id="w_q1" oninput="saveWeekField('q1', this.value)"></textarea>
+        <label class="field-label">2. ما تود تحسينه؟</label><textarea id="w_q2" oninput="saveWeekField('q2', this.value)"></textarea>
+        <label class="field-label">3. الدرس الأهم؟</label><textarea id="w_q3" oninput="saveWeekField('q3', this.value)"></textarea>
+        <label class="field-label" id="w_q4_label">4. السؤال الرابع</label><textarea id="w_q4" oninput="saveWeekField('q4', this.value)"></textarea>
+        <label class="field-label" id="w_q5_label">5. السؤال الخامس</label><textarea id="w_q5" oninput="saveWeekField('q5', this.value)"></textarea>
+      </div>
+    </section>
+
+   
