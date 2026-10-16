@@ -2,21 +2,21 @@
   "name": "ALIXOR Planner V1.0.0",
   "short_name": "ALIXOR",
   "description": "مخطط ALIXOR الشخصي وفق منهجية الأركان الأربعة نحو صفوة الـ 1%",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "https://muhammadalialkalti-cloud.github.io/ALIXOR-PLANNER-APP/index.html",
+  "scope": "https://muhammadalialkalti-cloud.github.io/ALIXOR-PLANNER-APP/",
   "display": "standalone",
   "background_color": "#0a0612",
   "theme_color": "#120924",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/9950/9950509.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/9950/9950509.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
