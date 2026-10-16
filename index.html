@@ -27,17 +27,17 @@
     #welcomeScreen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: radial-gradient(circle at center, #1e103a 0%, #0a0612 100%);
-      z-index: 9999999; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, visibility 0.6s;
+      z-index: 9999999; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s;
     }
-    #welcomeScreen.hidden { opacity: 0; visibility: hidden; }
-    .welcome-content { text-align: center; animation: slideUp 0.8s ease-out; padding: 20px; }
+    #welcomeScreen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .welcome-content { text-align: center; animation: slideUp 0.7s ease-out; padding: 20px; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .logo-svg { width: 140px; height: 140px; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(109,40,217,0.5)); }
-    .welcome-title { font-size: 2.8rem; font-weight: 900; letter-spacing: 6px; color: #fff; margin: 0; line-height: 1; }
-    .welcome-subtitle { font-size: 1.2rem; font-weight: 700; letter-spacing: 4px; color: var(--purple-soft); margin-bottom: 8px; }
-    .welcome-motto { font-size: 0.9rem; color: var(--silver-muted); margin-bottom: 35px; }
+    .logo-svg { width: 135px; height: 135px; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(109,40,217,0.5)); }
+    .welcome-title { font-size: 2.6rem; font-weight: 900; letter-spacing: 6px; color: #fff; margin: 0; line-height: 1; }
+    .welcome-subtitle { font-size: 1.15rem; font-weight: 700; letter-spacing: 4px; color: var(--purple-soft); margin-bottom: 8px; }
+    .welcome-motto { font-size: 0.9rem; color: var(--silver-muted); margin-bottom: 30px; }
     .btn-start {
-      padding: 14px 36px; font-size: 1.1rem; font-weight: 800; font-family: inherit;
+      padding: 13px 34px; font-size: 1.05rem; font-weight: 800; font-family: inherit;
       background: linear-gradient(135deg, var(--purple-primary), #4c1d95); color: #fff;
       border: 1px solid var(--purple-glow); border-radius: 99px; cursor: pointer; box-shadow: 0 8px 25px rgba(109, 40, 217, 0.4);
     }
@@ -45,11 +45,11 @@
     /* شاشة تحميل الـ PDF */
     #pdfLoadingOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(10, 6, 18, 0.95); backdrop-filter: blur(8px);
-      z-index: 99999999; display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center;
+      background: rgba(10, 6, 18, 0.96); backdrop-filter: blur(8px);
+      z-index: 99999999; display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px;
     }
-    @keyframes pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(1.2); opacity: 0.7; } }
-    .pdf-icon-anim { font-size: 4rem; margin-bottom: 20px; animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(1.18); opacity: 0.7; } }
+    .pdf-icon-anim { font-size: 3.8rem; margin-bottom: 16px; animation: pulse 0.9s infinite alternate; }
 
     /* الهيدر العلوي */
     .top-header {
@@ -57,69 +57,96 @@
       border-bottom: 1px solid var(--border-color); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;
     }
     .brand-box { display: flex; flex-direction: column; }
-    .brand-title { font-size: 1.05rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--purple-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-title { font-size: 1.02rem; font-weight: 900; background: linear-gradient(90deg, #fff, var(--purple-soft)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .brand-motto { font-size: 0.65rem; color: var(--purple-soft); opacity: 0.9; }
     .header-actions { display: flex; gap: 4px; align-items: center; }
-    .btn-icon { background: var(--bg-card-light); color: var(--silver); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 8px; font-family: inherit; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
+    .btn-icon { background: var(--bg-card-light); color: var(--silver); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 9px; font-family: inherit; font-size: 0.72rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
     .btn-accent { background: rgba(139, 92, 246, 0.35); border-color: var(--purple-glow); color: #fff; }
+    .btn-success { background: rgba(16, 185, 129, 0.25); border-color: var(--success); color: #a7f3d0; }
 
     .container { max-width: 780px; margin: 0 auto; padding: 10px; }
     .tab-section { display: none; }
-    .tab-section.active { display: block; animation: fadeIn 0.3s ease; }
+    .tab-section.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* تأثير التقريب للبطاقات */
+    /* البطاقات وتأثير التقريب */
     .card {
       background: linear-gradient(145deg, var(--bg-card) 0%, #10091e 100%); border: 1px solid var(--border-color); border-radius: var(--radius);
-      padding: 12px; margin-bottom: 12px; position: relative; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s, border-color 0.3s;
+      padding: 12px; margin-bottom: 12px; position: relative; transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s, border-color 0.25s;
     }
     .card::before { content: ""; position: absolute; top: 0; right: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--purple-glow), transparent); border-radius: 0 14px 14px 0; }
-    .card.zoomed { transform: scale(1.03); z-index: 50; box-shadow: 0 15px 40px rgba(0,0,0,0.8); border-color: var(--purple-glow); }
+    .card.zoomed { transform: scale(1.025); z-index: 50; box-shadow: 0 14px 35px rgba(0,0,0,0.85); border-color: var(--purple-glow); }
 
     .section-banner { text-align: center; padding: 14px 10px; margin-bottom: 12px; border-radius: var(--radius); background: linear-gradient(135deg, #2a1258 0%, #120826 100%); border: 1px solid rgba(196, 181, 253, 0.35); }
-    .section-banner h1 { font-size: 1.25rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
-    .section-banner .sub-en { font-size: 0.7rem; letter-spacing: 2px; color: var(--purple-soft); display: block; margin-bottom: 2px; }
-    
-    .card-title { font-size: 0.95rem; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px; }
+    .section-banner h1 { font-size: 1.2rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .section-banner .sub-en { font-size: 0.68rem; letter-spacing: 2px; color: var(--purple-soft); display: block; margin-bottom: 2px; }
+
+    .card-title { font-size: 0.92rem; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px; }
     .badge { font-size: 0.65rem; background: rgba(139, 92, 246, 0.25); color: var(--purple-soft); padding: 2px 6px; border-radius: 99px; border: 1px solid rgba(139, 92, 246, 0.4); }
 
-    label.field-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--purple-soft); margin-bottom: 4px; margin-top: 6px; }
-    input[type="text"], input[type="date"], input[type="number"], textarea { width: 100%; background: rgba(10, 6, 18, 0.75); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; padding: 7px 10px; color: #fff; font-family: inherit; font-size: 0.85rem; }
-    textarea { min-height: 50px; resize: vertical; } input:focus, textarea:focus { outline: none; border-color: var(--purple-glow); }
+    label.field-label { display: block; font-size: 0.76rem; font-weight: 700; color: var(--purple-soft); margin-bottom: 4px; margin-top: 6px; }
+    input[type="text"], input[type="date"], input[type="number"], textarea { width: 100%; background: rgba(10, 6, 18, 0.75); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; padding: 7px 10px; color: #fff; font-family: inherit; font-size: 0.84rem; }
+    textarea { min-height: 48px; resize: vertical; } input:focus, textarea:focus { outline: none; border-color: var(--purple-glow); }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
     .pillar-spiritual { border-right: 3px solid #a78bfa; } .pillar-mental { border-right: 3px solid #38bdf8; } .pillar-physical { border-right: 3px solid #34d399; } .pillar-emotional { border-right: 3px solid #f472b6; }
 
     .habit-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; } .custom-check { width: 20px; height: 20px; accent-color: var(--purple-primary); flex-shrink: 0; }
     .selector-bar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; }
-    .chip-btn { flex: 1; min-width: max-content; padding: 6px 10px; border-radius: 9px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--silver-muted); font-family: inherit; font-weight: 700; font-size: 0.78rem; cursor: pointer; text-align: center; }
+    .chip-btn { flex: 1; min-width: max-content; padding: 6px 10px; border-radius: 9px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--silver-muted); font-family: inherit; font-weight: 700; font-size: 0.76rem; cursor: pointer; text-align: center; }
     .chip-btn.active { background: linear-gradient(135deg, var(--purple-primary), #4c1d95); color: #fff; border-color: var(--purple-soft); box-shadow: 0 4px 10px rgba(109, 40, 217, 0.45); }
     .chip-btn .day-num-badge { display: block; font-size: 0.62rem; opacity: 0.85; }
 
-    .rating-circles { display: flex; align-items: center; gap: 4px; } .circle-btn { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--purple-glow); background: transparent; color: var(--silver); font-family: inherit; font-size: 0.75rem; font-weight: 800; } .circle-btn.filled { background: var(--purple-glow); color: #fff; box-shadow: 0 0 6px rgba(139, 92, 246, 0.6); }
-    .task-item { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; } .task-item input[type="text"].completed-task { text-decoration: line-through; opacity: 0.5; }
-    .btn-add-task { background:rgba(139,92,246,0.1); border:1px dashed var(--purple-soft); color:var(--purple-soft); width:100%; padding:5px; border-radius:8px; margin-top:4px; font-family:inherit; font-size:0.75rem; }
-    .mood-bar { display: flex; justify-content: space-around; gap: 4px; margin-top: 4px; } .mood-btn { flex: 1; padding: 6px 2px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); text-align: center; } .mood-btn span.emoji { font-size: 1.2rem; display: block; } .mood-btn.selected { background: rgba(139, 92, 246, 0.28); border-color: var(--purple-soft); transform: scale(1.05); }
+    .rating-circles { display: flex; align-items: center; gap: 4px; }
+    .circle-btn { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--purple-glow); background: transparent; color: var(--silver); font-family: inherit; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
+    .circle-btn.filled { background: var(--purple-glow); color: #fff; box-shadow: 0 0 6px rgba(139, 92, 246, 0.6); }
 
-    .graph-wrapper { background: #0c0718; border: 1px solid rgba(139, 92, 246, 0.35); border-radius: 10px; padding: 8px 2px; margin: 8px 0; overflow-x: auto; } .pillar-svg { width: 100%; min-width: 600px; height: 190px; display: block; }
-    .stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; } .stat-box { background: rgba(139, 92, 246, 0.12); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; text-align: center; } .stat-box .stat-label { font-size: 0.65rem; color: var(--silver-muted); display: block; } .stat-box .stat-val { font-size: 0.9rem; font-weight: 800; color: #fff; }
+    .task-item { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    .task-item input[type="text"].completed-task { text-decoration: line-through; opacity: 0.5; }
+    .btn-add-task { background:rgba(139,92,246,0.1); border:1px dashed var(--purple-soft); color:var(--purple-soft); width:100%; padding:5px; border-radius:8px; margin-top:4px; font-family:inherit; font-size:0.75rem; cursor:pointer; }
+    .mood-bar { display: flex; justify-content: space-around; gap: 4px; margin-top: 4px; }
+    .mood-btn { flex: 1; padding: 6px 2px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); text-align: center; cursor: pointer; }
+    .mood-btn span.emoji { font-size: 1.2rem; display: block; }
+    .mood-btn.selected { background: rgba(139, 92, 246, 0.28); border-color: var(--purple-soft); transform: scale(1.05); }
 
-    /* شريط التبويبات المحصن */
+    .graph-wrapper { background: #0c0718; border: 1px solid rgba(139, 92, 246, 0.35); border-radius: 10px; padding: 8px 2px; margin: 8px 0; overflow-x: auto; }
+    .pillar-svg { width: 100%; min-width: 600px; height: 190px; display: block; }
+    .stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+    .stat-box { background: rgba(139, 92, 246, 0.12); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px; text-align: center; }
+    .stat-box .stat-label { font-size: 0.65rem; color: var(--silver-muted); display: block; }
+    .stat-box .stat-val { font-size: 0.9rem; font-weight: 800; color: #fff; }
+
+    /* شريط التبويبات السفلي */
     .bottom-nav {
       position: fixed; bottom: 0; right: 0; left: 0; z-index: 99999;
       background: #0f081e; border-top: 1px solid var(--purple-primary);
-      display: flex; justify-content: space-around; padding: 8px 2px;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.9);
+      display: flex; justify-content: space-around; padding: 8px 2px; box-shadow: 0 -4px 20px rgba(0,0,0,0.9);
     }
-    .nav-item { flex: 1; background: none; border: none; color: var(--silver-muted); font-family: inherit; font-size: 0.7rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 2px; border-radius: 8px; }
-    .nav-item .nav-icon { font-size: 1.2rem; } .nav-item.active { color: #fff; background: rgba(139, 92, 246, 0.28); }
+    .nav-item { flex: 1; background: none; border: none; color: var(--silver-muted); font-family: inherit; font-size: 0.7rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 2px; border-radius: 8px; cursor: pointer; }
+    .nav-item .nav-icon { font-size: 1.2rem; }
+    .nav-item.active { color: #fff; background: rgba(139, 92, 246, 0.28); }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 16px; } .modal-overlay.active { display: flex; } .modal-card { background: var(--bg-card); border: 1px solid var(--purple-glow); border-radius: 16px; padding: 18px; width: 100%; max-width: 400px; }
-    #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--purple-primary); color: #fff; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 100000; } #toast.show { opacity: 1; }
+    /* النوافذ المنبثقة */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(6px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay.active { display: flex; }
+    .modal-card { background: var(--bg-card); border: 1px solid var(--purple-glow); border-radius: 16px; padding: 18px; width: 100%; max-width: 420px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
+
+    #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--purple-primary); color: #fff; padding: 7px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200000; white-space: nowrap; }
+    #toast.show { opacity: 1; }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      #welcomeScreen, .top-header, .bottom-nav, .selector-bar, #toast, .modal-overlay, .no-print { display: none !important; }
+      .tab-section { display: block !important; page-break-after: always; }
+      .card { background: #fff !important; color: #000 !important; border: 1px solid #ccc !important; box-shadow: none !important; }
+      input, textarea { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- شاشة الترحيب (Splash Screen) -->
+  <!-- شاشة الترحيب -->
   <div id="welcomeScreen">
     <div class="welcome-content">
       <svg class="logo-svg" viewBox="0 0 512 512">
@@ -145,15 +172,16 @@
   <!-- شاشة التحميل لصناعة الـ PDF -->
   <div id="pdfLoadingOverlay">
     <div class="pdf-icon-anim">📄</div>
-    <h2 style="color:var(--purple-soft); font-weight:800; font-family:'Cairo', sans-serif;">جاري صناعة ملف الـ PDF...</h2>
-    <p style="color:var(--silver-muted); font-size:0.85rem; margin-top:8px;">يرجى الانتظار بضع ثوانٍ (يتم تجميع وتصدير كافة البيانات)</p>
+    <h2 id="pdfLoadingTitle" style="color:var(--purple-soft); font-weight:800;">جاري تجهيز وتنزيل ملف الـ PDF...</h2>
+    <p style="color:var(--silver-muted); font-size:0.85rem; margin-top:8px;">يتم الآن تجميع صفحات الشهر وخرائط التتبع</p>
   </div>
 
   <!-- الهيدر العلوي -->
   <header class="top-header">
     <div class="brand-box"><span class="brand-title">ALIXOR PLANNER</span><span class="brand-motto">اللهم أنت مقصودي ورضاك مطلوبي ✦</span></div>
     <div class="header-actions">
-      <button type="button" class="btn-icon btn-accent" onclick="copyDataToClipboard()">📋 نسخ</button>
+      <button type="button" class="btn-icon btn-accent" onclick="smartPDFHandler()">📄 PDF</button>
+      <button type="button" class="btn-icon" onclick="copyDataToClipboard()">📋 نسخ</button>
       <button type="button" class="btn-icon" onclick="openImportModal()">📥 لصق</button>
     </div>
   </header>
@@ -171,14 +199,14 @@
         </div>
       </div>
       <div class="card" onclick="focusCard(this, event)">
-        <div class="card-title"><span>🔭 رؤية الشهر (الأركان)</span></div>
+        <div class="card-title"><span>🔭 رؤية الشهر (الأركان الأربعة)</span></div>
         <div class="grid-2">
           <div class="card pillar-spiritual" style="margin-bottom:0;" onclick="focusCard(this, event)"><div class="card-title"><span>🌙 الروحي</span></div><label class="field-label">أهداف الشهر</label><textarea id="vision_spiritual_goals" oninput="saveField('vision_spiritual_goals', this.value)"></textarea><div class="habit-row"><input type="checkbox" class="custom-check" id="vision_spiritual_check" onchange="saveField('vision_spiritual_check', this.checked)" /><input type="text" id="vision_spiritual_habit" placeholder="العادة المستهدفة" oninput="saveField('vision_spiritual_habit', this.value)" /></div></div>
           <div class="card pillar-mental" style="margin-bottom:0;" onclick="focusCard(this, event)"><div class="card-title"><span>🧠 العقلي</span></div><label class="field-label">أهداف الشهر</label><textarea id="vision_mental_goals" oninput="saveField('vision_mental_goals', this.value)"></textarea><div class="habit-row"><input type="checkbox" class="custom-check" id="vision_mental_check" onchange="saveField('vision_mental_check', this.checked)" /><input type="text" id="vision_mental_habit" placeholder="العادة المستهدفة" oninput="saveField('vision_mental_habit', this.value)" /></div></div>
           <div class="card pillar-physical" style="margin-bottom:0;" onclick="focusCard(this, event)"><div class="card-title"><span>⚡ البدني</span></div><label class="field-label">أهداف الشهر</label><textarea id="vision_physical_goals" oninput="saveField('vision_physical_goals', this.value)"></textarea><div class="habit-row"><input type="checkbox" class="custom-check" id="vision_physical_check" onchange="saveField('vision_physical_check', this.checked)" /><input type="text" id="vision_physical_habit" placeholder="العادة المستهدفة" oninput="saveField('vision_physical_habit', this.value)" /></div></div>
           <div class="card pillar-emotional" style="margin-bottom:0;" onclick="focusCard(this, event)"><div class="card-title"><span>🤝 العاطفي</span></div><label class="field-label">أهداف الشهر</label><textarea id="vision_emotional_goals" oninput="saveField('vision_emotional_goals', this.value)"></textarea><div class="habit-row"><input type="checkbox" class="custom-check" id="vision_emotional_check" onchange="saveField('vision_emotional_check', this.checked)" /><input type="text" id="vision_emotional_habit" placeholder="العادة المستهدفة" oninput="saveField('vision_emotional_habit', this.value)" /></div></div>
         </div>
-        <div style="margin-top:10px;"><label class="field-label">✉️ رسالة لنسخة نهاية الشهر</label><textarea id="vision_secret_msg" oninput="saveField('vision_secret_msg', this.value)"></textarea></div>
+        <div style="margin-top:10px;"><label class="field-label">✉️ رسالة سرية إلى نسخة نهاية الشهر</label><textarea id="vision_secret_msg" oninput="saveField('vision_secret_msg', this.value)"></textarea></div>
       </div>
     </section>
 
@@ -244,7 +272,7 @@
 
     <!-- TAB 4: خرائط التتبع -->
     <section id="tab-graphs" class="tab-section">
-      <div class="section-banner"><span class="sub-en">MONTHLY GRAPHS</span><h1>📈 خرائط التتبع</h1></div>
+      <div class="section-banner"><span class="sub-en">MONTHLY GRAPHS</span><h1>📈 خرائط التتبع الشهرية</h1></div>
       <div id="graphs_master_container"></div>
     </section>
 
@@ -252,14 +280,15 @@
     <section id="tab-review" class="tab-section">
       <div class="section-banner"><span class="sub-en">MONTH REVIEW</span><h1>🏆 تقييم الشهر والنمو</h1></div>
 
-      <div class="card" style="border:1px solid var(--purple-glow); background: rgba(109, 40, 217, 0.15); text-align: center;" onclick="focusCard(this, event)">
-        <div class="card-title" style="justify-content: center;"><span>📑 أرشفة الشهر (الحل الجذري)</span></div>
-        <div style="display:flex; flex-direction:column; gap:8px; max-width:300px; margin:0 auto;">
-          <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:10px; font-size:0.85rem;" onclick="generateAndSharePDF()">
-            📄 استخراج PDF (وحفظه في الجهاز)
+      <div class="card no-print" style="border:1px solid var(--purple-glow); background: rgba(109, 40, 217, 0.18); text-align: center;" onclick="focusCard(this, event)">
+        <div class="card-title" style="justify-content: center;"><span>📑 أرشفة وتصدير الشهر كـ PDF</span></div>
+        <p style="font-size:0.78rem; color:var(--silver-muted); margin-bottom:10px;">ينقل بياناتك المشفرة للمتصفح ويحفظ ملف الـ PDF تلقائياً في هاتفك:</p>
+        <div style="display:flex; flex-direction:column; gap:8px; max-width:310px; margin:0 auto;">
+          <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:11px; font-size:0.86rem;" onclick="smartPDFHandler()">
+            📄 استخراج وتحميل ملف الـ PDF الآن
           </button>
-          <button type="button" class="btn-icon" style="justify-content:center; padding:10px;" onclick="openInBrowserForPDF()">
-            🌐 فتح إجباري في متصفح كروم
+          <button type="button" class="btn-icon" style="justify-content:center; padding:9px;" onclick="copyDataToClipboard()">
+            📋 نسخ كود الشهر الاحتياطي
           </button>
         </div>
       </div>
@@ -287,7 +316,7 @@
         <label class="field-label">✉️ رسالة لنفسي</label><textarea id="m_year_end_msg" oninput="saveField('m_year_end_msg', this.value)"></textarea>
       </div>
 
-      <div class="card" style="text-align:center;">
+      <div class="card no-print" style="text-align:center;">
         <button type="button" class="btn-icon" style="background:rgba(239, 68, 68, 0.2); border-color:var(--danger); color:#fca5a5; padding:8px 16px; margin: 0 auto;" onclick="resetAllMonthData()">
           🗑️ مسح بيانات الشهر وبدء شهر جديد
         </button>
@@ -296,6 +325,34 @@
 
   </main>
 
+  <!-- نافذة الجسر الذكي لتصدير الـ PDF من داخل التطبيق -->
+  <div class="modal-overlay" id="pdfBridgeModal">
+    <div class="modal-card">
+      <div class="card-title">
+        <span>🚀 الجسر الذكي لتحميل الـ PDF</span>
+        <button type="button" onclick="closePdfBridgeModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--silver); margin-bottom:12px;">
+        تم دمج كافة بياناتك التي سجلتها بالتطبيق داخل رابط مشفر وجاهز. اختر طريقة التنزيل الفوري:
+      </p>
+      <div style="display:flex; flex-direction:column; gap:9px;">
+        <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="launchChromeAutoPDF()">
+          🌐 1. فتح في كروم وتنزيل الـ PDF تلقائياً
+        </button>
+        <button type="button" class="btn-icon btn-success" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="copyMagicPDFLink()">
+          📋 2. نسخ رابط الـ PDF المباشر (والصقه بكروم)
+        </button>
+        <button type="button" class="btn-icon" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="shareMagicPDFWhatsApp()">
+          💬 3. إرسال رابط التحميل المباشر لواتساب
+        </button>
+        <button type="button" class="btn-icon" style="justify-content:center; padding:9px; font-size:0.78rem; opacity:0.85;" onclick="startDirectPDFDownload()">
+          ⚡ محاولة التنزيل المباشر داخل هذه الشاشة
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة استيراد الكود -->
   <div class="modal-overlay" id="importModal">
     <div class="modal-card">
       <div class="card-title"><span>📥 استيراد كود البيانات</span><button type="button" onclick="closeImportModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button></div>
@@ -304,6 +361,7 @@
     </div>
   </div>
 
+  <!-- شريط التبويبات السفلي -->
   <nav class="bottom-nav">
     <button type="button" class="nav-item active" onclick="switchTab('tab-vision', 0)"><span class="nav-icon">🧭</span><span>الرؤية</span></button>
     <button type="button" class="nav-item" onclick="switchTab('tab-weekly', 1)"><span class="nav-icon">📅</span><span>الخطة</span></button>
@@ -343,6 +401,7 @@
     let currentWeekPlan = 1;
     let currentDailyWeek = 1;
     let currentDayIndex = 1;
+    let generatedMagicUrl = '';
 
     function createDefaultData() {
       let data = { fields: {}, weeks: {}, days: {}, graphsMeta: {} };
@@ -390,7 +449,7 @@
       t.textContent = msg || 'تم الحفظ تلقائياً ✓';
       t.classList.add('show');
       clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(function() { t.classList.remove('show'); }, 1200);
+      toastTimeout = setTimeout(function() { t.classList.remove('show'); }, 1500);
     }
 
     function switchTab(tabId, navIndex) {
@@ -430,10 +489,8 @@
     function renderWeekPlan(w) {
       const wData = appData.weeks[w];
       const meta = WEEKLY_DYNAMIC_QUESTIONS[w];
-
       document.getElementById('week_plan_title').textContent = '📅 تخطيط الأسبوع ' + w;
       document.getElementById('week_ref_title').textContent = '📊 تقييم الأسبوع ' + w;
-
       document.getElementById('w_main_goal').value = wData.main_goal || '';
       document.getElementById('w_word').value = wData.word || '';
       document.getElementById('w_challenge').value = wData.challenge || '';
@@ -463,7 +520,6 @@
 
       PILLARS.forEach(function(p) { let inputEl = document.getElementById('w_rate_' + p.key); inputEl.placeholder = ((pillarTotals[p.key] / 28) * 10).toFixed(1); inputEl.value = wData['rate_' + p.key] || ''; });
       document.getElementById('w_rate_overall').placeholder = ((totalPoints / 112) * 10).toFixed(1); document.getElementById('w_rate_overall').value = wData.rate_overall || '';
-
       document.getElementById('w_q4_label').textContent = meta.q4; document.getElementById('w_q5_label').textContent = meta.q5;
       ['q1', 'q2', 'q3', 'q4', 'q5'].forEach(function(qKey) { document.getElementById('w_' + qKey).value = wData[qKey] || ''; });
     }
@@ -504,7 +560,7 @@
       PILLARS.forEach(function(p) {
         let pState = curDayData.pillars[p.key];
         let card = document.createElement('div'); card.className = 'card ' + p.css; card.style.marginBottom = '0'; card.setAttribute('onclick', 'focusCard(this, event)');
-        
+
         let circlesHtml = '';
         for (let c = 1; c <= 4; c++) { circlesHtml += '<button type="button" class="circle-btn '+(c <= (pState.score || 0) ? 'filled' : '')+'" onclick="setPillarScore(\''+p.key+'\', '+c+')">'+c+'</button>'; }
 
@@ -587,24 +643,173 @@
       appData.graphsMeta[pillarKey].reason = val; persistData();
     }
 
-    /* =========================================================
-       نظام تصدير PDF والمشاركة (Android Share Intent) المدمج
-       ========================================================= */
-    function generateAndSharePDF() {
+    /* =====================================================================
+       خوارزمية الضغط الفائق والجسر المشفر (SMART COMPACT PDF BRIDGE ENGINE)
+       ===================================================================== */
+    function packCompactData() {
+      let c = { f: {}, g: {}, w: {}, s: '', m: '', d: {} };
+      for (let k in appData.fields) { if (appData.fields[k]) c.f[k] = appData.fields[k]; }
+      PILLARS.forEach(function(p) { if (appData.graphsMeta[p.key] && appData.graphsMeta[p.key].reason) c.g[p.key] = appData.graphsMeta[p.key].reason; });
+
+      for (let w = 1; w <= 4; w++) {
+        let wk = appData.weeks[w], wOut = {}, hasW = false;
+        ['main_goal','word','challenge','free_notes','habits_achieved','rate_spiritual','rate_mental','rate_physical','rate_emotional','rate_overall','q1','q2','q3','q4','q5'].forEach(function(f) {
+          if (wk[f]) { wOut[f] = wk[f]; hasW = true; }
+        });
+        if (wk.days_overview && wk.days_overview.some(function(x){ return x !== ''; })) { wOut.do = wk.days_overview; hasW = true; }
+        if (hasW) c.w[w] = wOut;
+      }
+
+      for (let d = 1; d <= 28; d++) {
+        let dy = appData.days[d];
+        c.m += String(dy.mood || 0);
+        let dOut = {}, hasD = false;
+        if (dy.date) { dOut.dt = dy.date; hasD = true; }
+        if (dy.quote) { dOut.q = dy.quote; hasD = true; }
+        if (dy.harvest) { dOut.h = dy.harvest; hasD = true; }
+
+        let tOut = {};
+        PILLARS.forEach(function(p) {
+          let pObj = dy.pillars[p.key];
+          c.s += String(pObj.score || 0);
+          let activeTasks = pObj.tasks.filter(function(t) { return t.text && t.text.trim() !== ''; });
+          if (activeTasks.length > 0) {
+            tOut[p.key] = activeTasks.map(function(t) { return [t.text, t.done ? 1 : 0]; });
+            hasD = true;
+          }
+        });
+        if (Object.keys(tOut).length > 0) dOut.t = tOut;
+        if (hasD) c.d[d] = dOut;
+      }
+
+      let jsonStr = JSON.stringify(c);
+      return btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function unpackCompactData(encodedStr) {
+      try {
+        let b64 = encodedStr.replace(/-/g, '+').replace(/_/g, '/');
+        while (b64.length % 4) b64 += '=';
+        let jsonStr = decodeURIComponent(escape(atob(b64)));
+        let c = JSON.parse(jsonStr);
+        let fresh = createDefaultData();
+
+        if (c.f) fresh.fields = c.f;
+        if (c.g) { PILLARS.forEach(function(p) { if (c.g[p.key]) fresh.graphsMeta[p.key].reason = c.g[p.key]; }); }
+        if (c.w) {
+          for (let w in c.w) {
+            let wIn = c.w[w];
+            for (let k in wIn) {
+              if (k === 'do') fresh.weeks[w].days_overview = wIn.do;
+              else fresh.weeks[w][k] = wIn[k];
+            }
+          }
+        }
+        let sIdx = 0;
+        for (let d = 1; d <= 28; d++) {
+          if (c.m && c.m[d - 1]) fresh.days[d].mood = parseInt(c.m[d - 1], 10) || 0;
+          PILLARS.forEach(function(p) {
+            if (c.s && c.s[sIdx]) fresh.days[d].pillars[p.key].score = parseInt(c.s[sIdx], 10) || 0;
+            sIdx++;
+          });
+          if (c.d && c.d[d]) {
+            let dIn = c.d[d];
+            if (dIn.dt) fresh.days[d].date = dIn.dt;
+            if (dIn.q) fresh.days[d].quote = dIn.q;
+            if (dIn.h) fresh.days[d].harvest = dIn.h;
+            if (dIn.t) {
+              for (let pk in dIn.t) {
+                fresh.days[d].pillars[pk].tasks = dIn.t[pk].map(function(arr) { return { text: arr[0], done: arr[1] === 1 }; });
+              }
+            }
+          }
+        }
+        return fresh;
+      } catch (e) {
+        console.error("Unpack error:", e);
+        return null;
+      }
+    }
+
+    function isInsideAndroidWebView() {
+      let ua = navigator.userAgent || '';
+      return (ua.indexOf('wv') > -1) || (ua.indexOf('Version/') > -1 && ua.indexOf('Chrome/') > -1) || (window.location.protocol === 'file:');
+    }
+
+    function buildMagicPDFUrl() {
+      let baseUrl = window.location.origin + window.location.pathname;
+      if (window.location.protocol === 'file:') {
+        let savedUrl = localStorage.getItem('ALIXOR_HOST_URL') || '';
+        savedUrl = prompt('أدخل رابط موقعك على GitHub Pages لربط الجسر:', savedUrl || 'https://');
+        if (savedUrl && savedUrl.indexOf('http') === 0) {
+          localStorage.setItem('ALIXOR_HOST_URL', savedUrl);
+          baseUrl = savedUrl;
+        }
+      }
+      return baseUrl + '?pdf_export=' + packCompactData();
+    }
+
+    function smartPDFHandler() {
+      generatedMagicUrl = buildMagicPDFUrl();
+      if (isInsideAndroidWebView()) {
+        document.getElementById('pdfBridgeModal').classList.add('active');
+      } else {
+        startDirectPDFDownload();
+      }
+    }
+
+    function closePdfBridgeModal() {
+      document.getElementById('pdfBridgeModal').classList.remove('active');
+    }
+
+    // 1. الفتح المباشر في كروم عبر بروتوكول googlechrome:// (لا يفتح متجر بلاي أبداً)
+    function launchChromeAutoPDF() {
+      closePdfBridgeModal();
+      showToast('جاري نقل البيانات لكروم لتحميل الـ PDF... 🚀');
+      let chromeSchemeUrl = 'googlechrome://navigate?url=' + encodeURIComponent(generatedMagicUrl);
+      window.location.href = chromeSchemeUrl;
+    }
+
+    // 2. نسخ رابط الـ PDF المشفر والجاهز للحافظة
+    function copyMagicPDFLink() {
+      fallbackCopyText(generatedMagicUrl, 'تم نسخ رابط الـ PDF! الصقه في متصفح كروم وسينزل فوراً 📄');
+      closePdfBridgeModal();
+    }
+
+    // 3. إرسال رابط التحميل المباشر إلى واتساب
+    function shareMagicPDFWhatsApp() {
+      closePdfBridgeModal();
+      let msg = '📄 رابط تحميل ملف الـ PDF الجاهز لبلانر ALIXOR (اضغط عليه ليفتح في كروم وينزل تلقائياً):\n' + generatedMagicUrl;
+      window.location.href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    }
+
+    // التنزيل الفعلي لملف الـ PDF (يعمل تلقائياً عند فتح الرابط في كروم)
+    function startDirectPDFDownload() {
+      closePdfBridgeModal();
+      document.getElementById('welcomeScreen').classList.add('hidden');
       document.getElementById('pdfLoadingOverlay').style.display = 'flex';
-      renderAllGraphs(); 
+      renderWeekPlan(currentWeekPlan);
+      renderDailyView();
+      renderAllGraphs();
+
       let sections = document.querySelectorAll('.tab-section');
-      sections.forEach(s => { s.style.display = 'block'; s.style.opacity = '1'; });
+      sections.forEach(function(s) { s.style.display = 'block'; s.style.opacity = '1'; });
 
       if (typeof html2pdf === 'undefined') {
         let script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-        script.onload = function() { executePDFExport(sections); };
+        script.onload = function() { runHtml2Pdf(sections); };
+        script.onerror = function() {
+          document.getElementById('pdfLoadingOverlay').style.display = 'none';
+          window.print();
+        };
         document.head.appendChild(script);
-      } else { executePDFExport(sections); }
+      } else {
+        runHtml2Pdf(sections);
+      }
     }
 
-    function executePDFExport(sections) {
+    function runHtml2Pdf(sections) {
       const mName = (appData.fields.cover_month || 'الشهر').replace(/\s+/g, '_');
       const fileName = 'ALIXOR_Planner_' + mName + '.pdf';
       const element = document.getElementById('appMainContainer');
@@ -617,52 +822,34 @@
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).outputPdf('blob').then(function(pdfBlob) {
-        sections.forEach(s => { s.style.display = 'none'; });
+      html2pdf().set(opt).from(element).save().then(function() {
+        sections.forEach(function(s) { s.style.display = 'none'; });
         switchTab('tab-review', 4);
         document.getElementById('pdfLoadingOverlay').style.display = 'none';
-
-        const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-        
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({
-            files: [file],
-            title: 'أرشيف ALIXOR Planner',
-            text: 'إليك ملف الـ PDF لحصاد هذا الشهر.'
-          }).then(() => { showToast('تم التصدير بنجاح ✨'); }).catch(err => { console.log("تم إلغاء المشاركة"); });
-        } else {
-          const url = URL.createObjectURL(pdfBlob);
-          const a = document.createElement('a');
-          a.href = url; a.download = fileName;
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          showToast('تم التحميل 📄');
-        }
-      }).catch(err => {
+        showToast('تم تنزيل ملف الـ PDF في جهازك بنجاح 📄✨');
+      }).catch(function() {
         document.getElementById('pdfLoadingOverlay').style.display = 'none';
-        alert('حدث خطأ أثناء التصدير.');
+        window.print();
       });
     }
 
-    function openInBrowserForPDF() {
-      const url = window.location.href.replace(/^https?:\/\//, '');
-      const intentUrl = 'intent://' + url + '#Intent;scheme=https;package=com.android.chrome;end;';
-      window.location.href = intentUrl;
+    function copyDataToClipboard() {
+      fallbackCopyText(JSON.stringify(appData), 'تم نسخ الكود للحافظة بنجاح 📋');
     }
 
-    function copyDataToClipboard() {
-      const codeStr = JSON.stringify(appData);
+    function fallbackCopyText(text, successMsg) {
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(codeStr).then(function() { showToast('تم النسخ للحافظة بنجاح 📋'); }).catch(function() { fallbackCopy(codeStr); });
-        } else { fallbackCopy(codeStr); }
-      } catch(e) { fallbackCopy(codeStr); }
+          navigator.clipboard.writeText(text).then(function() { showToast(successMsg); }).catch(function() { execCopy(text, successMsg); });
+        } else { execCopy(text, successMsg); }
+      } catch(e) { execCopy(text, successMsg); }
     }
 
-    function fallbackCopy(text) {
+    function execCopy(text, successMsg) {
       try {
         let ta = document.createElement('textarea'); ta.value = text;
         document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-        showToast('تم النسخ للحافظة بنجاح 📋');
+        showToast(successMsg);
       } catch(e) { alert('تعذر النسخ.'); }
     }
 
@@ -675,19 +862,37 @@
       try {
         let imported = JSON.parse(val);
         if (imported && imported.days && imported.weeks) {
-          appData = imported; persistData(); initApp(); closeImportModal(); showToast('تمت استعادة البيانات ✨');
+          appData = imported; persistData(); loadStaticFields(); switchTab('tab-vision', 0); closeImportModal(); showToast('تمت استعادة البيانات ✨');
         } else { alert('الكود غير صالح.'); }
       } catch (e) { alert('خطأ في قراءة الكود.'); }
     }
 
     function resetAllMonthData() {
       if (confirm('تأكد من حفظ نسخة قبل المتابعة.\n\nهل تود بدء شهر جديد وتصفير العدادات؟')) {
-        appData = createDefaultData(); persistData(); initApp(); showToast('تم تصفير التطبيق ✨'); switchTab('tab-vision', 0);
+        appData = createDefaultData(); persistData(); loadStaticFields(); switchTab('tab-vision', 0); showToast('تم تصفير التطبيق ✨');
       }
     }
 
     function initApp() {
       try {
+        // فحص ما إذا كان الرابط يحتوي على شيفرة التصدير التلقائي (?pdf_export=...)
+        let urlParams = new URLSearchParams(window.location.search);
+        let exportedPayload = urlParams.get('pdf_export');
+
+        if (exportedPayload) {
+          let unpacked = unpackCompactData(exportedPayload);
+          if (unpacked) {
+            appData = unpacked;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            loadStaticFields();
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            // تنظيف شريط العنوان وبدء تنزيل الـ PDF فوراً وبشكل تلقائي
+            window.history.replaceState({}, document.title, window.location.pathname);
+            setTimeout(function() { startDirectPDFDownload(); }, 500);
+            return;
+          }
+        }
+
         appData = loadInitialData();
         loadStaticFields();
         switchTab('tab-vision', 0);
