@@ -210,8 +210,9 @@
   <!-- الهيدر العلوي -->
   <header class="top-header">
     <div class="brand-box"><span class="brand-title">ALIXOR PLANNER</span><span class="brand-motto">اللهم أنت مقصودي ورضاك مطلوبي ✦</span></div>
-    <div class="header-actions">
-      <button type="button" class="btn-icon btn-accent" onclick="exportFullCleanPDF()">📄 تقرير PDF الكامل</button>
+<div class="header-actions">
+      <button type="button" class="btn-icon" id="btnNotification" onclick="toggleDailyNotification()" title="تفعيل التنبيه اليومي">🔔 تذكير</button>
+      <button type="button" class="btn-icon btn-accent" onclick="exportFullCleanPDF()">📄 PDF</button>
       <button type="button" class="btn-icon" onclick="copyDataToClipboard()">📋 نسخ</button>
       <button type="button" class="btn-icon" onclick="openImportModal()">📥 لصق</button>
     </div>
@@ -864,6 +865,76 @@
     }
 
     window.addEventListener('DOMContentLoaded', initApp);
+// تسجيل Service Worker
+    let swRegistration = null;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        swRegistration = reg;
+      }).catch((err) => console.log('SW Registration failed', err));
+    }
+
+    // تفعيل إذن الإشعارات وجدولة التذكير
+    function toggleDailyNotification() {
+      if (!('Notification' in window)) {
+        alert('المتصفح أو النظام على هذا الجهاز لا يدعم الإشعارات.');
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        sendImmediateNotification('تذكير ALIXOR اليومي مفعل ✓', 'سننبهك دورياً لتسجيل مهامك وحصاد أركانك الأربعة.');
+        showToast('التنبيهات مفعلة مسبقاً 🔔');
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            sendImmediateNotification('أهلاً بك في ALIXOR ✦', 'تم تفعيل التنبيهات بنجاح نحو صفوة الـ 1%.');
+            showToast('تم تفعيل التنبيهات بنجاح 🔔');
+          } else {
+            showToast('تم رفض إذن الإشعارات.');
+          }
+        });
+      } else {
+        alert('الإشعارات محظورة في إعدادات التطبيق. يرجى تفعيلها من إعدادات الهاتف.');
+      }
+    }
+
+    function sendImmediateNotification(titleText, bodyText) {
+      if (swRegistration && swRegistration.active) {
+        swRegistration.active.postMessage({
+          type: 'SHOW_NOTIFICATION',
+          title: titleText,
+          body: bodyText
+        });
+      } else if (Notification.permission === 'granted') {
+        new Notification(titleText, {
+          body: bodyText,
+          icon: './icon-512.png',
+          dir: 'rtl'
+        });
+      }
+    }
+
+    // فحص يومي عند فتح التطبيق لتذكيرك إذا لم تكن قد قيمت يومك الحالي بعد
+    function checkDailyReminder() {
+      if (Notification.permission === 'granted') {
+        const lastCheck = localStorage.getItem('ALIXOR_LAST_REMINDER_DATE');
+        const todayStr = new Date().toDateString();
+        if (lastCheck !== todayStr) {
+          setTimeout(() => {
+            sendImmediateNotification(
+              'حان وقت الارتقاء ✦',
+              'خصص 3 دقائق لتعبئة حصاد اليوم ومتابعة نمو أركانك الأربعة.'
+            );
+            localStorage.setItem('ALIXOR_LAST_REMINDER_DATE', todayStr);
+          }, 4000);
+        }
+      }
+    }
+
+    // استدعاء فحص التذكير مع بدء التشغيل
+    window.addEventListener('load', () => {
+      setTimeout(checkDailyReminder, 2000);
+    });
+    
   </script>
 </body>
 </html>
