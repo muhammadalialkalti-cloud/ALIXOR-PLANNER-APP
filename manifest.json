@@ -1,0 +1,24 @@
+{
+  "name": "ALIXOR Planner V1.0.0",
+  "short_name": "ALIXOR",
+  "description": "مخطط ALIXOR الشخصي وفق منهجية الأركان الأربعة نحو صفوة الـ 1%",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0612",
+  "theme_color": "#120924",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/alixor/planner-assets/main/icon-512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/alixor/planner-assets/main/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
