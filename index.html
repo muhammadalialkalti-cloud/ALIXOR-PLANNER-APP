@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#120924" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ALIXOR Planner" />
   <title>ALIXOR PLANNER V1.0.0</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
@@ -42,15 +46,6 @@
       border: 1px solid var(--purple-glow); border-radius: 99px; cursor: pointer; box-shadow: 0 8px 25px rgba(109, 40, 217, 0.4);
     }
 
-    /* شاشة تحميل الـ PDF */
-    #pdfLoadingOverlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(10, 6, 18, 0.96); backdrop-filter: blur(8px);
-      z-index: 99999999; display: none; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px;
-    }
-    @keyframes pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(1.18); opacity: 0.7; } }
-    .pdf-icon-anim { font-size: 3.8rem; margin-bottom: 16px; animation: pulse 0.9s infinite alternate; }
-
     /* الهيدر العلوي */
     .top-header {
       position: sticky; top: 0; z-index: 100; background: rgba(10, 6, 18, 0.96); backdrop-filter: blur(12px);
@@ -75,7 +70,7 @@
       padding: 12px; margin-bottom: 12px; position: relative; transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s, border-color 0.25s;
     }
     .card::before { content: ""; position: absolute; top: 0; right: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--purple-glow), transparent); border-radius: 0 14px 14px 0; }
-    .card.zoomed { transform: scale(1.025); z-index: 50; box-shadow: 0 14px 35px rgba(0,0,0,0.85); border-color: var(--purple-glow); }
+    .card.zoomed { transform: scale(1.02); z-index: 50; box-shadow: 0 14px 35px rgba(0,0,0,0.85); border-color: var(--purple-glow); }
 
     .section-banner { text-align: center; padding: 14px 10px; margin-bottom: 12px; border-radius: var(--radius); background: linear-gradient(135deg, #2a1258 0%, #120826 100%); border: 1px solid rgba(196, 181, 253, 0.35); }
     .section-banner h1 { font-size: 1.2rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
@@ -135,12 +130,54 @@
     #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--purple-primary); color: #fff; padding: 7px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200000; white-space: nowrap; }
     #toast.show { opacity: 1; }
 
+    /* =====================================================================
+       حاوية التقرير الشهري الكامل المخصص للطباعة والـ PDF (مخفية في الوضع العادي)
+       ===================================================================== */
+    #fullMonthPrintReport {
+      display: none;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 15px;
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      direction: rtl;
+    }
+    .print-page-block {
+      page-break-after: always;
+      margin-bottom: 24px;
+      border: 2px solid #4c1d95;
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+    }
+    .print-header-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 2px solid #6d28d9; padding-bottom: 8px; margin-bottom: 14px;
+    }
+    .print-header-bar h2 { color: #4c1d95; font-size: 1.2rem; font-weight: 900; }
+    .print-header-bar span { color: #64748b; font-size: 0.8rem; font-weight: 700; }
+    .print-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .print-box {
+      border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; background: #f8fafc;
+    }
+    .print-box h4 { color: #5b21b6; font-size: 0.9rem; margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+    .print-box p { font-size: 0.82rem; color: #1e293b; white-space: pre-wrap; min-height: 18px; }
+    .print-day-card {
+      border: 1px solid #94a3b8; border-radius: 8px; padding: 10px; margin-bottom: 10px;
+      page-break-inside: avoid; background: #fff;
+    }
+    .print-day-header {
+      background: #ede9fe; color: #4c1d95; padding: 5px 10px; border-radius: 6px;
+      font-weight: 800; font-size: 0.88rem; display: flex; justify-content: space-between; margin-bottom: 8px;
+    }
+    .print-pillars-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .print-pillar-col { border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px; font-size: 0.76rem; background: #fafafa; }
+    .print-pillar-col strong { display: block; color: #4c1d95; border-bottom: 1px solid #e2e8f0; margin-bottom: 4px; padding-bottom: 2px; }
+
     @media print {
-      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
-      #welcomeScreen, .top-header, .bottom-nav, .selector-bar, #toast, .modal-overlay, .no-print { display: none !important; }
-      .tab-section { display: block !important; page-break-after: always; }
-      .card { background: #fff !important; color: #000 !important; border: 1px solid #ccc !important; box-shadow: none !important; }
-      input, textarea { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; }
+      #welcomeScreen, .top-header, #appMainContainer, .bottom-nav, #toast, .modal-overlay { display: none !important; }
+      #fullMonthPrintReport { display: block !important; width: 100% !important; padding: 0 !important; }
+      .print-page-block { border: 1px solid #6d28d9 !important; box-shadow: none !important; }
     }
   </style>
 </head>
@@ -169,18 +206,11 @@
     </div>
   </div>
 
-  <!-- شاشة التحميل لصناعة الـ PDF -->
-  <div id="pdfLoadingOverlay">
-    <div class="pdf-icon-anim">📄</div>
-    <h2 id="pdfLoadingTitle" style="color:var(--purple-soft); font-weight:800;">جاري تجهيز وتنزيل ملف الـ PDF...</h2>
-    <p style="color:var(--silver-muted); font-size:0.85rem; margin-top:8px;">يتم الآن تجميع صفحات الشهر وخرائط التتبع</p>
-  </div>
-
   <!-- الهيدر العلوي -->
   <header class="top-header">
     <div class="brand-box"><span class="brand-title">ALIXOR PLANNER</span><span class="brand-motto">اللهم أنت مقصودي ورضاك مطلوبي ✦</span></div>
     <div class="header-actions">
-      <button type="button" class="btn-icon btn-accent" onclick="smartPDFHandler()">📄 PDF</button>
+      <button type="button" class="btn-icon btn-accent" onclick="exportFullCleanPDF()">📄 تقرير PDF الكامل</button>
       <button type="button" class="btn-icon" onclick="copyDataToClipboard()">📋 نسخ</button>
       <button type="button" class="btn-icon" onclick="openImportModal()">📥 لصق</button>
     </div>
@@ -280,12 +310,15 @@
     <section id="tab-review" class="tab-section">
       <div class="section-banner"><span class="sub-en">MONTH REVIEW</span><h1>🏆 تقييم الشهر والنمو</h1></div>
 
-      <div class="card no-print" style="border:1px solid var(--purple-glow); background: rgba(109, 40, 217, 0.18); text-align: center;" onclick="focusCard(this, event)">
-        <div class="card-title" style="justify-content: center;"><span>📑 أرشفة وتصدير الشهر كـ PDF</span></div>
-        <p style="font-size:0.78rem; color:var(--silver-muted); margin-bottom:10px;">ينقل بياناتك المشفرة للمتصفح ويحفظ ملف الـ PDF تلقائياً في هاتفك:</p>
-        <div style="display:flex; flex-direction:column; gap:8px; max-width:310px; margin:0 auto;">
-          <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:11px; font-size:0.86rem;" onclick="smartPDFHandler()">
-            📄 استخراج وتحميل ملف الـ PDF الآن
+      <div class="card" style="border:1px solid var(--purple-glow); background: rgba(109, 40, 217, 0.18); text-align: center;" onclick="focusCard(this, event)">
+        <div class="card-title" style="justify-content: center;"><span>📑 أرشفة وتصدير الشهر كاملاً (28 يوماً)</span></div>
+        <p style="font-size:0.78rem; color:var(--silver-muted); margin-bottom:10px;">يولّد وثيقة PDF نظيفة تضم الأسابيع الـ 4 والأيام الـ 28 كاملة بدون أي أزرار من التطبيق:</p>
+        <div style="display:flex; flex-direction:column; gap:8px; max-width:320px; margin:0 auto;">
+          <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:11px; font-size:0.85rem;" onclick="exportFullCleanPDF()">
+            📄 طباعة / حفظ تقرير الشهر كاملاً (PDF)
+          </button>
+          <button type="button" class="btn-icon btn-success" style="justify-content:center; padding:10px; font-size:0.82rem;" onclick="downloadStandaloneHTMLArchive()">
+            📥 تنزيل ملف أرشيف الشهر القابل للفتح والطباعة
           </button>
           <button type="button" class="btn-icon" style="justify-content:center; padding:9px;" onclick="copyDataToClipboard()">
             📋 نسخ كود الشهر الاحتياطي
@@ -316,7 +349,7 @@
         <label class="field-label">✉️ رسالة لنفسي</label><textarea id="m_year_end_msg" oninput="saveField('m_year_end_msg', this.value)"></textarea>
       </div>
 
-      <div class="card no-print" style="text-align:center;">
+      <div class="card" style="text-align:center;">
         <button type="button" class="btn-icon" style="background:rgba(239, 68, 68, 0.2); border-color:var(--danger); color:#fca5a5; padding:8px 16px; margin: 0 auto;" onclick="resetAllMonthData()">
           🗑️ مسح بيانات الشهر وبدء شهر جديد
         </button>
@@ -325,32 +358,8 @@
 
   </main>
 
-  <!-- نافذة الجسر الذكي لتصدير الـ PDF من داخل التطبيق -->
-  <div class="modal-overlay" id="pdfBridgeModal">
-    <div class="modal-card">
-      <div class="card-title">
-        <span>🚀 الجسر الذكي لتحميل الـ PDF</span>
-        <button type="button" onclick="closePdfBridgeModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
-      </div>
-      <p style="font-size:0.8rem; color:var(--silver); margin-bottom:12px;">
-        تم دمج كافة بياناتك التي سجلتها بالتطبيق داخل رابط مشفر وجاهز. اختر طريقة التنزيل الفوري:
-      </p>
-      <div style="display:flex; flex-direction:column; gap:9px;">
-        <button type="button" class="btn-icon btn-accent" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="launchChromeAutoPDF()">
-          🌐 1. فتح في كروم وتنزيل الـ PDF تلقائياً
-        </button>
-        <button type="button" class="btn-icon btn-success" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="copyMagicPDFLink()">
-          📋 2. نسخ رابط الـ PDF المباشر (والصقه بكروم)
-        </button>
-        <button type="button" class="btn-icon" style="justify-content:center; padding:11px; font-size:0.84rem;" onclick="shareMagicPDFWhatsApp()">
-          💬 3. إرسال رابط التحميل المباشر لواتساب
-        </button>
-        <button type="button" class="btn-icon" style="justify-content:center; padding:9px; font-size:0.78rem; opacity:0.85;" onclick="startDirectPDFDownload()">
-          ⚡ محاولة التنزيل المباشر داخل هذه الشاشة
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- حاوية التقرير الكامل والنظيف للـ 28 يوماً (تُبنى برمجياً عند التصدير) -->
+  <div id="fullMonthPrintReport"></div>
 
   <!-- نافذة استيراد الكود -->
   <div class="modal-overlay" id="importModal">
@@ -373,6 +382,25 @@
   <div id="toast">تم الحفظ تلقائياً ✓</div>
 
   <script>
+    // تسجيل التطبيق كـ PWA نظامي ليعمل كتطبيق أندرويد مستقل عند تثبيته من كروم
+    (function setupPWA() {
+      try {
+        const manifest = {
+          name: "ALIXOR Planner V1.0.0",
+          short_name: "ALIXOR",
+          start_url: "./",
+          display: "standalone",
+          background_color: "#0a0612",
+          theme_color: "#120924",
+          orientation: "portrait"
+        };
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+        document.head.appendChild(link);
+      } catch(e) {}
+    })();
+
     function enterApp() { document.getElementById('welcomeScreen').classList.add('hidden'); }
     function focusCard(el, event) {
       if(event && ['INPUT', 'TEXTAREA', 'BUTTON', 'svg', 'path'].includes(event.target.tagName)) return;
@@ -382,26 +410,30 @@
 
     const STORAGE_KEY = 'ALIXOR_PLANNER_V1_DATA';
     const DAYS_AR = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+    const MOOD_EMOJIS = { 5: '🤩 متفائل ومنجز', 4: '🙂 راضٍ وهادئ', 3: '😐 متوازن', 2: '😓 مرهق', 1: '😔 مشتت', 0: '-' };
 
     const PILLARS = [
-      { key: 'spiritual', name: 'الركن الروحي', icon: '🌙', color: '#a78bfa', css: 'pillar-spiritual' },
-      { key: 'mental',    name: 'الركن العقلي', icon: '🧠', color: '#38bdf8', css: 'pillar-mental' },
-      { key: 'physical',  name: 'الركن البدني', icon: '⚡', color: '#34d399', css: 'pillar-physical' },
-      { key: 'emotional', name: 'الركن العاطفي', icon: '🤝', color: '#f472b6', css: 'pillar-emotional' }
+      { key: 'spiritual', name: 'الركن الروحي', icon: '🌙', color: '#7c3aed', css: 'pillar-spiritual' },
+      { key: 'mental',    name: 'الركن العقلي', icon: '🧠', color: '#0284c7', css: 'pillar-mental' },
+      { key: 'physical',  name: 'الركن البدني', icon: '⚡', color: '#059669', css: 'pillar-physical' },
+      { key: 'emotional', name: 'الركن العاطفي', icon: '🤝', color: '#db2777', css: 'pillar-emotional' }
     ];
 
     const WEEKLY_DYNAMIC_QUESTIONS = {
-      1: { q4: '4. النية التي بدأت بها؟', q5: '5. أول خطوة عملية؟' },
-      2: { q4: '4. عادة حافظت عليها؟', q5: '5. حالتك الروحية والعاطفية؟' },
-      3: { q4: '4. أكبر عقبة واجهتك؟', q5: '5. كيف تتجاوزها مستقبلاً؟' },
-      4: { q4: '4. أكثر ما أنت فخور به؟', q5: '5. ماذا تحمل للشهر القادم؟' }
+      1: { q4: '4. ما النية التي بدأت بها هذا الشهر، وهل ما زلت ثابتاً عليها؟', q5: '5. ما أول خطوة عملية اتخذتها لتحقيق رؤية هذا الشهر؟' },
+      2: { q4: '4. ما العادة التي حافظت على استمراريتها هذا الأسبوع رغم المشاغل؟', q5: '5. كيف كانت حالتي الروحية والعاطفية مقارنة بالأسبوع الماضي؟' },
+      3: { q4: '4. ما أكبر عقبة واجهتك هذا الأسبوع، وكيف تعاملت معها؟', q5: '5. ما الذي سيساعدك على تجاوز نفس العقبة لو تكررت الأسبوع القادم؟' },
+      4: { q4: '4. بالنظر إلى الأسابيع الأربعة، ما أكثر ما أنت فخور بإنجازه هذا الشهر؟', q5: '5. ما الذي تريد أن تحمله معك إلى مراجعة الشهر القادم؟' }
     };
 
     let appData = null;
     let currentWeekPlan = 1;
     let currentDailyWeek = 1;
     let currentDayIndex = 1;
-    let generatedMagicUrl = '';
+
+    function escHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
     function createDefaultData() {
       let data = { fields: {}, weeks: {}, days: {}, graphsMeta: {} };
@@ -501,7 +533,7 @@
       DAYS_AR.forEach(function(dayName, idx) {
         let dayGlobalIndex = (w - 1) * 7 + idx + 1;
         let div = document.createElement('div');
-        div.innerHTML = '<label class="field-label" style="display:flex; justify-content:space-between;"><span>'+dayName+'</span><a href="javascript:void(0)" onclick="jumpToDay('+w+', '+dayGlobalIndex+')" style="color:var(--purple-glow); font-size:0.7rem; text-decoration:none;">اليوم '+dayGlobalIndex+' ⬅</a></label><input type="text" placeholder="مهام '+dayName+'..." value="'+(wData.days_overview[idx] || '').replace(/"/g, '&quot;')+'" oninput="saveWeekDayOverview('+idx+', this.value)" />';
+        div.innerHTML = '<label class="field-label" style="display:flex; justify-content:space-between;"><span>'+dayName+'</span><a href="javascript:void(0)" onclick="jumpToDay('+w+', '+dayGlobalIndex+')" style="color:var(--purple-glow); font-size:0.7rem; text-decoration:none;">اليوم '+dayGlobalIndex+' ⬅</a></label><input type="text" placeholder="مهام '+dayName+'..." value="'+escHtml(wData.days_overview[idx])+'" oninput="saveWeekDayOverview('+idx+', this.value)" />';
         grid.appendChild(div);
       });
 
@@ -566,7 +598,7 @@
 
         let tasksHtml = '';
         pState.tasks.forEach(function(taskObj, tIdx) {
-          tasksHtml += '<div class="task-item"><input type="checkbox" class="custom-check" '+(taskObj.done ? 'checked' : '')+' onchange="togglePillarTask(\''+p.key+'\', '+tIdx+', this.checked)" /><input type="text" style="flex:1;" class="'+(taskObj.done ? 'completed-task' : '')+'" placeholder="المهمة..." value="'+(taskObj.text || '').replace(/"/g, '&quot;')+'" oninput="updatePillarTaskText(\''+p.key+'\', '+tIdx+', this.value)" /><button type="button" onclick="deletePillarTask(\''+p.key+'\', '+tIdx+')" style="background:none; border:none; color:var(--danger); font-size:1rem; cursor:pointer; padding:0 4px;">✕</button></div>';
+          tasksHtml += '<div class="task-item"><input type="checkbox" class="custom-check" '+(taskObj.done ? 'checked' : '')+' onchange="togglePillarTask(\''+p.key+'\', '+tIdx+', this.checked)" /><input type="text" style="flex:1;" class="'+(taskObj.done ? 'completed-task' : '')+'" placeholder="المهمة..." value="'+escHtml(taskObj.text)+'" oninput="updatePillarTaskText(\''+p.key+'\', '+tIdx+', this.value)" /><button type="button" onclick="deletePillarTask(\''+p.key+'\', '+tIdx+')" style="background:none; border:none; color:var(--danger); font-size:1rem; cursor:pointer; padding:0 4px;">✕</button></div>';
         });
         tasksHtml += '<button type="button" class="btn-add-task" onclick="addPillarTask(\''+p.key+'\')">➕ إضافة مهمة</button>';
 
@@ -583,56 +615,67 @@
     function addPillarTask(pillarKey) { appData.days[currentDayIndex].pillars[pillarKey].tasks.push({text: '', done: false}); persistData(); renderDailyView(); }
     function deletePillarTask(pillarKey, taskIdx) { appData.days[currentDayIndex].pillars[pillarKey].tasks.splice(taskIdx, 1); persistData(); renderDailyView(); }
 
+    function generatePillarSvgString(p, isPrintMode) {
+      let scores = [], maxScore = -1, minScore = 5, strongestDays = [], weakestDays = [], totalPillarPoints = 0;
+      for (let d = 1; d <= 28; d++) {
+        let s = appData.days[d].pillars[p.key].score || 0;
+        scores.push(s); totalPillarPoints += s;
+        if (s > 0) {
+          if (s > maxScore) { maxScore = s; strongestDays = [d]; } else if (s === maxScore) { strongestDays.push(d); }
+          if (s < minScore) { minScore = s; weakestDays = [d]; } else if (s === minScore) { weakestDays.push(d); }
+        }
+      }
+
+      let strongestText = maxScore > 0 ? 'يوم (' + strongestDays.slice(0, 3).join('، ') + ') ← ' + maxScore + '/4' : 'لا يوجد';
+      let weakestText = minScore < 5 ? 'يوم (' + weakestDays.slice(0, 3).join('، ') + ') ← ' + minScore + '/4' : 'لا يوجد';
+
+      let svgWidth = 680, svgHeight = 185, padLeft = 32, padRight = 16, padTop = 15, padBottom = 25;
+      let plotW = svgWidth - padLeft - padRight, plotH = svgHeight - padTop - padBottom;
+      let getX = function(d) { return padLeft + ((d - 1) / 27) * plotW; };
+      let getY = function(val) { return padTop + plotH - (val / 4) * plotH; };
+
+      let gridStroke = isPrintMode ? '#cbd5e1' : 'rgba(255,255,255,0.12)';
+      let textColor = isPrintMode ? '#334155' : '#94a3b8';
+
+      let gridLinesHtml = '';
+      for (let val = 0; val <= 4; val++) {
+        let y = getY(val);
+        gridLinesHtml += '<line x1="'+padLeft+'" y1="'+y+'" x2="'+(svgWidth - padRight)+'" y2="'+y+'" stroke="'+gridStroke+'" stroke-dasharray="'+(val === 0 ? 'none' : '4,4')+'" /><text x="'+(padLeft - 10)+'" y="'+(y + 4)+'" fill="'+textColor+'" font-size="11" text-anchor="middle">'+val+'</text>';
+      }
+
+      let xLabelsHtml = '';
+      for (let d = 1; d <= 28; d++) {
+        let x = getX(d);
+        gridLinesHtml += '<line x1="'+x+'" y1="'+padTop+'" x2="'+x+'" y2="'+(padTop + plotH)+'" stroke="'+(d % 7 === 0 ? '#a78bfa' : gridStroke)+'" stroke-opacity="0.4" />';
+        xLabelsHtml += '<text x="'+x+'" y="'+(svgHeight - 6)+'" fill="'+textColor+'" font-size="10" text-anchor="middle">'+d+'</text>';
+      }
+
+      let pointsArray = [];
+      for(let i=0; i<scores.length; i++) { pointsArray.push(getX(i + 1) + ',' + getY(scores[i])); }
+      let pointsStr = pointsArray.join(' ');
+      let areaPointsStr = getX(1)+','+getY(0)+' '+pointsStr+' '+getX(28)+','+getY(0);
+
+      let circlesSvg = '';
+      for(let i=0; i<scores.length; i++) {
+        circlesSvg += '<circle cx="'+getX(i + 1)+'" cy="'+getY(scores[i])+'" r="'+(scores[i] > 0 ? 4.5 : 2.5)+'" fill="'+(scores[i] > 0 ? p.color : (isPrintMode ? '#cbd5e1' : '#1e1b4b'))+'" stroke="#fff" stroke-width="1" />';
+      }
+
+      let svgHtml = '<svg class="pillar-svg" viewBox="0 0 '+svgWidth+' '+svgHeight+'"><polygon points="'+areaPointsStr+'" fill="'+p.color+'" fill-opacity="0.18" /><polyline fill="none" stroke="'+p.color+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+pointsStr+'" />'+gridLinesHtml+circlesSvg+xLabelsHtml+'</svg>';
+
+      return { svgHtml: svgHtml, strongestText: strongestText, weakestText: weakestText, totalPillarPoints: totalPillarPoints };
+    }
+
     function renderAllGraphs() {
       let container = document.getElementById('graphs_master_container');
       container.innerHTML = '';
 
       PILLARS.forEach(function(p) {
-        let scores = [], maxScore = -1, minScore = 5, strongestDays = [], weakestDays = [], totalPillarPoints = 0;
-
-        for (let d = 1; d <= 28; d++) {
-          let s = appData.days[d].pillars[p.key].score || 0;
-          scores.push(s); totalPillarPoints += s;
-          if (s > 0) {
-            if (s > maxScore) { maxScore = s; strongestDays = [d]; } else if (s === maxScore) { strongestDays.push(d); }
-            if (s < minScore) { minScore = s; weakestDays = [d]; } else if (s === minScore) { weakestDays.push(d); }
-          }
-        }
-
-        let strongestText = maxScore > 0 ? 'يوم (' + strongestDays.slice(0, 3).join('، ') + ') ← ' + maxScore : '-';
-        let weakestText = minScore < 5 ? 'يوم (' + weakestDays.slice(0, 3).join('، ') + ') ← ' + minScore : '-';
-
-        let svgWidth = 680, svgHeight = 190, padLeft = 32, padRight = 16, padTop = 15, padBottom = 25;
-        let plotW = svgWidth - padLeft - padRight, plotH = svgHeight - padTop - padBottom;
-        let getX = function(d) { return padLeft + ((d - 1) / 27) * plotW; };
-        let getY = function(val) { return padTop + plotH - (val / 4) * plotH; };
-
-        let gridLinesHtml = '';
-        for (let val = 0; val <= 4; val++) {
-          let y = getY(val);
-          gridLinesHtml += '<line x1="'+padLeft+'" y1="'+y+'" x2="'+(svgWidth - padRight)+'" y2="'+y+'" stroke="rgba(255,255,255,0.1)" stroke-dasharray="'+(val === 0 ? 'none' : '4,4')+'" /><text x="'+(padLeft - 10)+'" y="'+(y + 4)+'" fill="#94a3b8" font-size="11" text-anchor="middle">'+val+'</text>';
-        }
-
-        let xLabelsHtml = '';
-        for (let d = 1; d <= 28; d++) {
-          let x = getX(d);
-          gridLinesHtml += '<line x1="'+x+'" y1="'+padTop+'" x2="'+x+'" y2="'+(padTop + plotH)+'" stroke="'+(d % 7 === 0 ? 'rgba(139,92,246,0.3)' : 'rgba(255,255,255,0.05)')+'" />';
-          xLabelsHtml += '<text x="'+x+'" y="'+(svgHeight - 6)+'" fill="'+(scores[d - 1] > 0 ? '#fff' : '#64748b')+'" font-size="10" text-anchor="middle">'+d+'</text>';
-        }
-
-        let pointsArray = [];
-        for(let i=0; i<scores.length; i++) { pointsArray.push(getX(i + 1) + ',' + getY(scores[i])); }
-        let pointsStr = pointsArray.join(' ');
-        let areaPointsStr = getX(1)+','+getY(0)+' '+pointsStr+' '+getX(28)+','+getY(0);
-
-        let circlesSvg = '';
-        for(let i=0; i<scores.length; i++) { circlesSvg += '<circle cx="'+getX(i + 1)+'" cy="'+getY(scores[i])+'" r="'+(scores[i] > 0 ? 5 : 3)+'" fill="'+(scores[i] > 0 ? p.color : '#1e1b4b')+'" stroke="#fff" stroke-width="1.5" />'; }
-
-        let safeReason = (appData.graphsMeta && appData.graphsMeta[p.key] ? appData.graphsMeta[p.key].reason : '').replace(/"/g, '&quot;');
+        let gObj = generatePillarSvgString(p, false);
+        let safeReason = escHtml(appData.graphsMeta && appData.graphsMeta[p.key] ? appData.graphsMeta[p.key].reason : '');
 
         let card = document.createElement('div');
         card.className = 'card ' + p.css; card.setAttribute('onclick', 'focusCard(this, event)');
-        card.innerHTML = '<div class="card-title"><span>'+p.icon+' '+p.name+'</span><span class="badge">المجموع: '+totalPillarPoints+'/112</span></div><div class="graph-wrapper" dir="ltr"><svg class="pillar-svg" viewBox="0 0 '+svgWidth+' '+svgHeight+'"><defs><linearGradient id="grad_'+p.key+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+p.color+'" stop-opacity="0.35" /><stop offset="100%" stop-color="'+p.color+'" stop-opacity="0.0" /></linearGradient></defs>'+gridLinesHtml+'<polygon points="'+areaPointsStr+'" fill="url(#grad_'+p.key+')" /><polyline fill="none" stroke="'+p.color+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+pointsStr+'" />'+circlesSvg+xLabelsHtml+'</svg></div><div class="grid-2"><div class="stat-box" style="text-align:right;"><span class="stat-label">🔥 أقوى يوم:</span><span class="stat-val" style="color:var(--success); font-size:0.8rem;">'+strongestText+'</span></div><div class="stat-box" style="text-align:right;"><span class="stat-label">⚠️ أضعف يوم:</span><span class="stat-val" style="color:var(--gold-accent); font-size:0.8rem;">'+weakestText+'</span></div></div><label class="field-label">سبب الارتفاع أو الانخفاض:</label><input type="text" value="'+safeReason+'" oninput="saveGraphReason(\''+p.key+'\', this.value)" />';
+        card.innerHTML = '<div class="card-title"><span>'+p.icon+' '+p.name+'</span><span class="badge">المجموع: '+gObj.totalPillarPoints+'/112</span></div><div class="graph-wrapper" dir="ltr">'+gObj.svgHtml+'</div><div class="grid-2"><div class="stat-box" style="text-align:right;"><span class="stat-label">🔥 أقوى يوم:</span><span class="stat-val" style="color:var(--success); font-size:0.8rem;">'+gObj.strongestText+'</span></div><div class="stat-box" style="text-align:right;"><span class="stat-label">⚠️ أضعف يوم:</span><span class="stat-val" style="color:var(--gold-accent); font-size:0.8rem;">'+gObj.weakestText+'</span></div></div><label class="field-label">سبب الارتفاع أو الانخفاض:</label><input type="text" value="'+safeReason+'" oninput="saveGraphReason(\''+p.key+'\', this.value)" />';
         container.appendChild(card);
       });
     }
@@ -644,212 +687,150 @@
     }
 
     /* =====================================================================
-       خوارزمية الضغط الفائق والجسر المشفر (SMART COMPACT PDF BRIDGE ENGINE)
+       محرك بناء التقرير الكامل للشهر (الـ 4 أسابيع والـ 28 يوماً بدون أزرار)
        ===================================================================== */
-    function packCompactData() {
-      let c = { f: {}, g: {}, w: {}, s: '', m: '', d: {} };
-      for (let k in appData.fields) { if (appData.fields[k]) c.f[k] = appData.fields[k]; }
-      PILLARS.forEach(function(p) { if (appData.graphsMeta[p.key] && appData.graphsMeta[p.key].reason) c.g[p.key] = appData.graphsMeta[p.key].reason; });
+    function buildFullMonthReportHTML() {
+      let f = appData.fields || {};
+      let html = '';
 
+      // 1. صفحة الغلاف ورؤية الشهر
+      html += '<div class="print-page-block">';
+      html += '<div class="print-header-bar"><h2>ALIXOR PLANNER — وثيقة حصاد الشهر</h2><span>اللهم أنت مقصودي ورضاك مطلوبي ✦</span></div>';
+      html += '<div class="print-grid-2">';
+      html += '<div class="print-box"><h4>📅 الشهر</h4><p>' + escHtml(f.cover_month || 'غير محدد') + '</p></div>';
+      html += '<div class="print-box"><h4>🎯 النية الأساسية للشهر</h4><p>' + escHtml(f.cover_intention || '-') + '</p></div>';
+      html += '</div>';
+      html += '<h3 style="color:#4c1d95; margin:12px 0 8px;">🔭 رؤية الشهر (الأركان الأربعة)</h3>';
+      html += '<div class="print-grid-2">';
+      html += '<div class="print-box"><h4>🌙 الركن الروحي</h4><p><strong>الأهداف:</strong> ' + escHtml(f.vision_spiritual_goals || '-') + '\n<strong>العادة:</strong> ' + (f.vision_spiritual_check ? '☑ ' : '☐ ') + escHtml(f.vision_spiritual_habit || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>🧠 الركن العقلي</h4><p><strong>الأهداف:</strong> ' + escHtml(f.vision_mental_goals || '-') + '\n<strong>العادة:</strong> ' + (f.vision_mental_check ? '☑ ' : '☐ ') + escHtml(f.vision_mental_habit || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>⚡ الركن البدني</h4><p><strong>الأهداف:</strong> ' + escHtml(f.vision_physical_goals || '-') + '\n<strong>العادة:</strong> ' + (f.vision_physical_check ? '☑ ' : '☐ ') + escHtml(f.vision_physical_habit || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>🤝 الركن العاطفي</h4><p><strong>الأهداف:</strong> ' + escHtml(f.vision_emotional_goals || '-') + '\n<strong>العادة:</strong> ' + (f.vision_emotional_check ? '☑ ' : '☐ ') + escHtml(f.vision_emotional_habit || '-') + '</p></div>';
+      html += '</div>';
+      html += '<div class="print-box"><h4>✉️ رسالة سرية إلى نسخة نهاية الشهر</h4><p>' + escHtml(f.vision_secret_msg || '-') + '</p></div>';
+      html += '</div>';
+
+      // 2. الأسابيع الأربعة كاملة (1 إلى 4) مع كافة الأيام (1 إلى 28)
       for (let w = 1; w <= 4; w++) {
-        let wk = appData.weeks[w], wOut = {}, hasW = false;
-        ['main_goal','word','challenge','free_notes','habits_achieved','rate_spiritual','rate_mental','rate_physical','rate_emotional','rate_overall','q1','q2','q3','q4','q5'].forEach(function(f) {
-          if (wk[f]) { wOut[f] = wk[f]; hasW = true; }
-        });
-        if (wk.days_overview && wk.days_overview.some(function(x){ return x !== ''; })) { wOut.do = wk.days_overview; hasW = true; }
-        if (hasW) c.w[w] = wOut;
-      }
+        let wk = appData.weeks[w];
+        let qMeta = WEEKLY_DYNAMIC_QUESTIONS[w];
+        html += '<div class="print-page-block">';
+        html += '<div class="print-header-bar"><h2>📅 الأسبوع ' + w + ' — التخطيط واليوميات (الأيام ' + ((w-1)*7+1) + ' إلى ' + (w*7) + ')</h2><span>ALIXOR PLANNER</span></div>';
+        html += '<div class="print-grid-2">';
+        html += '<div class="print-box"><h4>🎯 هدف الأسبوع الرئيسي</h4><p>' + escHtml(wk.main_goal || '-') + '</p></div>';
+        html += '<div class="print-box"><h4>🔑 كلمة الأسبوع | 🔥 التحدي</h4><p><strong>الكلمة:</strong> ' + escHtml(wk.word || '-') + ' | <strong>التحدي:</strong> ' + escHtml(wk.challenge || '-') + '</p></div>';
+        html += '</div>';
 
-      for (let d = 1; d <= 28; d++) {
-        let dy = appData.days[d];
-        c.m += String(dy.mood || 0);
-        let dOut = {}, hasD = false;
-        if (dy.date) { dOut.dt = dy.date; hasD = true; }
-        if (dy.quote) { dOut.q = dy.quote; hasD = true; }
-        if (dy.harvest) { dOut.h = dy.harvest; hasD = true; }
+        // الأيام السبعة لهذا الأسبوع
+        for (let i = 0; i < 7; i++) {
+          let dNum = (w - 1) * 7 + i + 1;
+          let dy = appData.days[dNum];
+          let daySum = 0;
+          PILLARS.forEach(function(p) { daySum += (dy.pillars[p.key].score || 0); });
 
-        let tOut = {};
-        PILLARS.forEach(function(p) {
-          let pObj = dy.pillars[p.key];
-          c.s += String(pObj.score || 0);
-          let activeTasks = pObj.tasks.filter(function(t) { return t.text && t.text.trim() !== ''; });
-          if (activeTasks.length > 0) {
-            tOut[p.key] = activeTasks.map(function(t) { return [t.text, t.done ? 1 : 0]; });
-            hasD = true;
-          }
-        });
-        if (Object.keys(tOut).length > 0) dOut.t = tOut;
-        if (hasD) c.d[d] = dOut;
-      }
+          html += '<div class="print-day-card">';
+          html += '<div class="print-day-header"><span>' + DAYS_AR[i] + ' (اليوم ' + dNum + ' من 28) ' + (dy.date ? '— ' + escHtml(dy.date) : '') + '</span><span>المجموع: ' + daySum + '/16 | المزاج: ' + (MOOD_EMOJIS[dy.mood || 0]) + '</span></div>';
+          if (dy.quote) html += '<div style="font-size:0.78rem; color:#4c1d95; margin-bottom:6px;"><strong>💡 عبارة اليوم:</strong> ' + escHtml(dy.quote) + '</div>';
 
-      let jsonStr = JSON.stringify(c);
-      return btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    }
-
-    function unpackCompactData(encodedStr) {
-      try {
-        let b64 = encodedStr.replace(/-/g, '+').replace(/_/g, '/');
-        while (b64.length % 4) b64 += '=';
-        let jsonStr = decodeURIComponent(escape(atob(b64)));
-        let c = JSON.parse(jsonStr);
-        let fresh = createDefaultData();
-
-        if (c.f) fresh.fields = c.f;
-        if (c.g) { PILLARS.forEach(function(p) { if (c.g[p.key]) fresh.graphsMeta[p.key].reason = c.g[p.key]; }); }
-        if (c.w) {
-          for (let w in c.w) {
-            let wIn = c.w[w];
-            for (let k in wIn) {
-              if (k === 'do') fresh.weeks[w].days_overview = wIn.do;
-              else fresh.weeks[w][k] = wIn[k];
-            }
-          }
-        }
-        let sIdx = 0;
-        for (let d = 1; d <= 28; d++) {
-          if (c.m && c.m[d - 1]) fresh.days[d].mood = parseInt(c.m[d - 1], 10) || 0;
+          html += '<div class="print-pillars-row">';
           PILLARS.forEach(function(p) {
-            if (c.s && c.s[sIdx]) fresh.days[d].pillars[p.key].score = parseInt(c.s[sIdx], 10) || 0;
-            sIdx++;
+            let pState = dy.pillars[p.key];
+            let dots = '●'.repeat(pState.score || 0) + '○'.repeat(4 - (pState.score || 0));
+            let nonEmptyTasks = pState.tasks.filter(function(t) { return t.text && t.text.trim() !== ''; });
+            let tListHtml = nonEmptyTasks.length > 0
+              ? nonEmptyTasks.map(function(t) { return '<div>' + (t.done ? '☑ ' : '☐ ') + escHtml(t.text) + '</div>'; }).join('')
+              : '<div style="color:#94a3b8;">-</div>';
+            html += '<div class="print-pillar-col"><strong>' + p.icon + ' ' + p.name + ' (' + dots + ')</strong>' + tListHtml + '</div>';
           });
-          if (c.d && c.d[d]) {
-            let dIn = c.d[d];
-            if (dIn.dt) fresh.days[d].date = dIn.dt;
-            if (dIn.q) fresh.days[d].quote = dIn.q;
-            if (dIn.h) fresh.days[d].harvest = dIn.h;
-            if (dIn.t) {
-              for (let pk in dIn.t) {
-                fresh.days[d].pillars[pk].tasks = dIn.t[pk].map(function(arr) { return { text: arr[0], done: arr[1] === 1 }; });
-              }
-            }
-          }
+          html += '</div>';
+
+          if (dy.harvest) html += '<div style="font-size:0.78rem; margin-top:6px; border-top:1px dashed #cbd5e1; padding-top:4px;"><strong>🌾 حصاد اليوم:</strong> ' + escHtml(dy.harvest) + '</div>';
+          html += '</div>';
         }
-        return fresh;
-      } catch (e) {
-        console.error("Unpack error:", e);
-        return null;
+
+        // تقييم وتحليل الأسبوع
+        html += '<div class="print-box" style="margin-top:10px; background:#f5f3ff; border-color:#c4b5fd;">';
+        html += '<h4>📊 تقييم وتحليل الأسبوع ' + w + '</h4>';
+        html += '<p><strong>التقييمات (/10):</strong> الروحي: ' + escHtml(wk.rate_spiritual || '-') + ' | العقلي: ' + escHtml(wk.rate_mental || '-') + ' | البدني: ' + escHtml(wk.rate_physical || '-') + ' | العاطفي: ' + escHtml(wk.rate_emotional || '-') + ' | العام: ' + escHtml(wk.rate_overall || '-') + '</p>';
+        html += '<p style="margin-top:4px;"><strong>1. أبرز إنجاز:</strong> ' + escHtml(wk.q1 || '-') + '\n<strong>2. ما أود تحسينه:</strong> ' + escHtml(wk.q2 || '-') + '\n<strong>3. الدرس الأهم:</strong> ' + escHtml(wk.q3 || '-') + '\n<strong>' + qMeta.q4 + '</strong> ' + escHtml(wk.q4 || '-') + '\n<strong>' + qMeta.q5 + '</strong> ' + escHtml(wk.q5 || '-') + '</p>';
+        html += '</div>';
+        html += '</div>';
       }
-    }
 
-    function isInsideAndroidWebView() {
-      let ua = navigator.userAgent || '';
-      return (ua.indexOf('wv') > -1) || (ua.indexOf('Version/') > -1 && ua.indexOf('Chrome/') > -1) || (window.location.protocol === 'file:');
-    }
-
-    function buildMagicPDFUrl() {
-      let baseUrl = window.location.origin + window.location.pathname;
-      if (window.location.protocol === 'file:') {
-        let savedUrl = localStorage.getItem('ALIXOR_HOST_URL') || '';
-        savedUrl = prompt('أدخل رابط موقعك على GitHub Pages لربط الجسر:', savedUrl || 'https://');
-        if (savedUrl && savedUrl.indexOf('http') === 0) {
-          localStorage.setItem('ALIXOR_HOST_URL', savedUrl);
-          baseUrl = savedUrl;
-        }
-      }
-      return baseUrl + '?pdf_export=' + packCompactData();
-    }
-
-    function smartPDFHandler() {
-      generatedMagicUrl = buildMagicPDFUrl();
-      if (isInsideAndroidWebView()) {
-        document.getElementById('pdfBridgeModal').classList.add('active');
-      } else {
-        startDirectPDFDownload();
-      }
-    }
-
-    function closePdfBridgeModal() {
-      document.getElementById('pdfBridgeModal').classList.remove('active');
-    }
-
-    // 1. الفتح المباشر في كروم عبر بروتوكول googlechrome:// (لا يفتح متجر بلاي أبداً)
-    function launchChromeAutoPDF() {
-      closePdfBridgeModal();
-      showToast('جاري نقل البيانات لكروم لتحميل الـ PDF... 🚀');
-      let chromeSchemeUrl = 'googlechrome://navigate?url=' + encodeURIComponent(generatedMagicUrl);
-      window.location.href = chromeSchemeUrl;
-    }
-
-    // 2. نسخ رابط الـ PDF المشفر والجاهز للحافظة
-    function copyMagicPDFLink() {
-      fallbackCopyText(generatedMagicUrl, 'تم نسخ رابط الـ PDF! الصقه في متصفح كروم وسينزل فوراً 📄');
-      closePdfBridgeModal();
-    }
-
-    // 3. إرسال رابط التحميل المباشر إلى واتساب
-    function shareMagicPDFWhatsApp() {
-      closePdfBridgeModal();
-      let msg = '📄 رابط تحميل ملف الـ PDF الجاهز لبلانر ALIXOR (اضغط عليه ليفتح في كروم وينزل تلقائياً):\n' + generatedMagicUrl;
-      window.location.href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-    }
-
-    // التنزيل الفعلي لملف الـ PDF (يعمل تلقائياً عند فتح الرابط في كروم)
-    function startDirectPDFDownload() {
-      closePdfBridgeModal();
-      document.getElementById('welcomeScreen').classList.add('hidden');
-      document.getElementById('pdfLoadingOverlay').style.display = 'flex';
-      renderWeekPlan(currentWeekPlan);
-      renderDailyView();
-      renderAllGraphs();
-
-      let sections = document.querySelectorAll('.tab-section');
-      sections.forEach(function(s) { s.style.display = 'block'; s.style.opacity = '1'; });
-
-      if (typeof html2pdf === 'undefined') {
-        let script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-        script.onload = function() { runHtml2Pdf(sections); };
-        script.onerror = function() {
-          document.getElementById('pdfLoadingOverlay').style.display = 'none';
-          window.print();
-        };
-        document.head.appendChild(script);
-      } else {
-        runHtml2Pdf(sections);
-      }
-    }
-
-    function runHtml2Pdf(sections) {
-      const mName = (appData.fields.cover_month || 'الشهر').replace(/\s+/g, '_');
-      const fileName = 'ALIXOR_Planner_' + mName + '.pdf';
-      const element = document.getElementById('appMainContainer');
-
-      const opt = {
-        margin:       6,
-        filename:     fileName,
-        image:        { type: 'jpeg', quality: 0.95 },
-        html2canvas:  { scale: 1.5, useCORS: true, backgroundColor: '#0a0612' },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save().then(function() {
-        sections.forEach(function(s) { s.style.display = 'none'; });
-        switchTab('tab-review', 4);
-        document.getElementById('pdfLoadingOverlay').style.display = 'none';
-        showToast('تم تنزيل ملف الـ PDF في جهازك بنجاح 📄✨');
-      }).catch(function() {
-        document.getElementById('pdfLoadingOverlay').style.display = 'none';
-        window.print();
+      // 3. خرائط التتبع الشهرية للأركان الأربعة
+      html += '<div class="print-page-block">';
+      html += '<div class="print-header-bar"><h2>📈 خرائط التتبع الشهرية للأركان الأربعة (28 يوماً)</h2><span>MONTHLY PILLAR GRAPHS</span></div>';
+      PILLARS.forEach(function(p) {
+        let gObj = generatePillarSvgString(p, true);
+        let reason = escHtml(appData.graphsMeta && appData.graphsMeta[p.key] ? appData.graphsMeta[p.key].reason : '-');
+        html += '<div class="print-box" style="margin-bottom:10px; page-break-inside:avoid;">';
+        html += '<h4>' + p.icon + ' ' + p.name + ' — المجموع: ' + gObj.totalPillarPoints + '/112 | أقوى يوم: ' + gObj.strongestText + ' | أضعف يوم: ' + gObj.weakestText + '</h4>';
+        html += '<div dir="ltr" style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:4px;">' + gObj.svgHtml + '</div>';
+        html += '<p style="margin-top:4px;"><strong>سبب الارتفاع / الانخفاض:</strong> ' + reason + '</p>';
+        html += '</div>';
       });
+      html += '</div>';
+
+      // 4. الحصاد الختامي والنمو الاستراتيجي
+      html += '<div class="print-page-block" style="page-break-after:auto;">';
+      html += '<div class="print-header-bar"><h2>🏆 الحصاد الختامي للشهر والنمو الاستراتيجي</h2><span>END OF MONTH REVIEW</span></div>';
+      html += '<div class="print-grid-2">';
+      html += '<div class="print-box"><h4>🌟 أبرز إنجازات الشهر</h4><p>' + escHtml(f.m_achievements || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>🚧 التحديات والعقبات</h4><p>' + escHtml(f.m_challenges || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>💡 الدروس المستفادة</h4><p>' + escHtml(f.m_lessons || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>📊 تقييم الشهر من 10</h4><p>الروحي: ' + escHtml(f.m_rate_spiritual || '-') + ' | العقلي: ' + escHtml(f.m_rate_mental || '-') + ' | البدني: ' + escHtml(f.m_rate_physical || '-') + ' | العاطفي: ' + escHtml(f.m_rate_emotional || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>💭 أفكار الشهر القادم</h4><p>' + escHtml(f.m_next_big_ideas || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>🎯 أهداف الشهر القادم</h4><p>' + escHtml(f.m_next_goals || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>🤲 شكري لله هذا الشهر</h4><p>' + escHtml(f.m_gratitude || '-') + '</p></div>';
+      html += '<div class="print-box"><h4>✉️ رسالة لنفسي في نهاية العام</h4><p>' + escHtml(f.m_year_end_msg || '-') + '</p></div>';
+      html += '</div>';
+      html += '</div>';
+
+      return html;
+    }
+
+    // تصدير وطباعة التقرير الكامل للشهر بدون أي عنصر من واجهة التطبيق
+    function exportFullCleanPDF() {
+      const reportContainer = document.getElementById('fullMonthPrintReport');
+      reportContainer.innerHTML = buildFullMonthReportHTML();
+      const mName = (appData.fields.cover_month || 'الشهر').replace(/\s+/g, '_');
+      const oldTitle = document.title;
+      document.title = 'ALIXOR_Planner_' + mName;
+      window.print();
+      setTimeout(function() { document.title = oldTitle; }, 1000);
+    }
+
+    // تنزيل ملف أرشيف مستقل (HTML قابل للفتح والطباعة على أي جهاز)
+    function downloadStandaloneHTMLArchive() {
+      const reportHtml = buildFullMonthReportHTML();
+      const mName = (appData.fields.cover_month || 'الشهر').replace(/\s+/g, '_');
+      const fullDoc = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>أرشيف ALIXOR - ' + mName + '</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet"><style>body{font-family:"Cairo",sans-serif;background:#f1f5f9;color:#0f172a;padding:20px;max-width:900px;margin:0 auto;}' + document.querySelector('style').innerHTML + '#fullMonthPrintReport{display:block!important;}</style></head><body><div style="text-align:center;margin-bottom:15px;" class="no-print"><button onclick="window.print()" style="padding:12px 28px;background:#6d28d9;color:#fff;border:none;border-radius:99px;font-family:inherit;font-weight:bold;cursor:pointer;font-size:1rem;">🖨️ حفظ كملف PDF / طباعة</button></div><div id="fullMonthPrintReport">' + reportHtml + '</div></body></html>';
+
+      const blob = new Blob([fullDoc], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ALIXOR_Archive_' + mName + '.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('تم تنزيل ملف أرشيف الشهر الكامل بنجاح 📥');
     }
 
     function copyDataToClipboard() {
-      fallbackCopyText(JSON.stringify(appData), 'تم نسخ الكود للحافظة بنجاح 📋');
-    }
-
-    function fallbackCopyText(text, successMsg) {
+      const text = JSON.stringify(appData);
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function() { showToast(successMsg); }).catch(function() { execCopy(text, successMsg); });
-        } else { execCopy(text, successMsg); }
-      } catch(e) { execCopy(text, successMsg); }
+          navigator.clipboard.writeText(text).then(function() { showToast('تم نسخ الكود للحافظة بنجاح 📋'); }).catch(function() { execCopy(text); });
+        } else { execCopy(text); }
+      } catch(e) { execCopy(text); }
     }
 
-    function execCopy(text, successMsg) {
+    function execCopy(text) {
       try {
         let ta = document.createElement('textarea'); ta.value = text;
         document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-        showToast(successMsg);
+        showToast('تم نسخ الكود للحافظة بنجاح 📋');
       } catch(e) { alert('تعذر النسخ.'); }
     }
 
@@ -875,24 +856,6 @@
 
     function initApp() {
       try {
-        // فحص ما إذا كان الرابط يحتوي على شيفرة التصدير التلقائي (?pdf_export=...)
-        let urlParams = new URLSearchParams(window.location.search);
-        let exportedPayload = urlParams.get('pdf_export');
-
-        if (exportedPayload) {
-          let unpacked = unpackCompactData(exportedPayload);
-          if (unpacked) {
-            appData = unpacked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-            loadStaticFields();
-            document.getElementById('welcomeScreen').classList.add('hidden');
-            // تنظيف شريط العنوان وبدء تنزيل الـ PDF فوراً وبشكل تلقائي
-            window.history.replaceState({}, document.title, window.location.pathname);
-            setTimeout(function() { startDirectPDFDownload(); }, 500);
-            return;
-          }
-        }
-
         appData = loadInitialData();
         loadStaticFields();
         switchTab('tab-vision', 0);
